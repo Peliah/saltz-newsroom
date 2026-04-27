@@ -53,11 +53,21 @@ export default function TabLayout() {
             style={{
               minWidth: 88,
               alignItems: 'center',
+              paddingTop: 2,
               paddingBottom: 10,
               borderBottomWidth: focused ? 2 : 0,
               borderBottomColor: '#EE343B',
             }}>
-            <Text style={{ color, fontSize: 12 }}>{children}</Text>
+            <Text
+              style={{
+                color,
+                fontSize: 12,
+                lineHeight: 16,
+                textTransform: 'uppercase',
+                includeFontPadding: false,
+              }}>
+              {children}
+            </Text>
           </View>
         ),
       }}>
