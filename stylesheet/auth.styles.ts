@@ -41,7 +41,7 @@ export const authStyles = StyleSheet.create({
   },
   form: {
     gap: 24,
-    paddingBottom: 8,
+    paddingBottom: 2,
   },
   input: {
     height: 34,
@@ -77,6 +77,37 @@ export const authStyles = StyleSheet.create({
     lineHeight: 16,
     color: '#9498A2',
     fontFamily: 'InterRegular',
+  },
+  forgotPasswordRow: {
+    alignSelf: 'stretch',
+    alignItems: 'flex-end',
+    marginTop: -2,
+    marginBottom: 6,
+  },
+  forgotPasswordText: {
+    fontSize: 12,
+    lineHeight: 16,
+    color: '#9498A2',
+    fontFamily: 'InterRegular',
+    textAlign: 'right',
+  },
+  forgotPasswordTextHighlight: {
+    color: '#F0F2F5',
+    fontFamily: 'InterBold',
+  },
+  signUpRow: {
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  signUpText: {
+    fontSize: 12,
+    lineHeight: 16,
+    color: '#9498A2',
+    fontFamily: 'InterRegular',
+  },
+  signUpTextHighlight: {
+    color: '#F0F2F5',
+    fontFamily: 'InterBold',
   },
   helperLinksRow: {
     flexDirection: 'row',

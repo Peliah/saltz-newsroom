@@ -28,6 +28,12 @@ export default function SignInScreen() {
             <CustomInput placeholder="Password" secureTextEntry />
           </View>
 
+          <Link href="/(auth)/forgot-password" style={styles.forgotPasswordRow}>
+            <Text style={styles.forgotPasswordText}>
+              Forgot your password? <Text style={styles.forgotPasswordTextHighlight}>Reset it</Text>
+            </Text>
+          </Link>
+
           <View style={styles.rememberRow}>
             <Pressable
               onPress={() => setRememberMe((value) => !value)}
@@ -39,15 +45,11 @@ export default function SignInScreen() {
 
           <CustomButton label="Sign In" onPress={() => router.replace('/(tabs)')} />
 
-          <Text style={styles.helper}>Account links:</Text>
-          <View style={styles.helperLinksRow}>
-            <Link href="/(auth)/sigin-up">
-              <Text style={styles.link}>Sign Up</Text>
-            </Link>
-            <Link href="/(auth)/forgot-password">
-              <Text style={styles.link}>Forgot password</Text>
-            </Link>
-          </View>
+          <Link href="/(auth)/sigin-up" style={styles.signUpRow}>
+            <Text style={styles.signUpText}>
+              New here? <Text style={styles.signUpTextHighlight}>Create an account</Text>
+            </Text>
+          </Link>
         </View>
       </View>
 

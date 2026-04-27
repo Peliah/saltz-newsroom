@@ -23,11 +23,18 @@ export default function ForgotPasswordScreen() {
             <CustomInput placeholder="Email" keyboardType="email-address" />
           </View>
 
+          <Link href="/(auth)/sigin-in" style={styles.forgotPasswordRow}>
+            <Text style={styles.forgotPasswordText}>
+              Remembered your password?{' '}
+              <Text style={styles.forgotPasswordTextHighlight}>Back to sign in</Text>
+            </Text>
+          </Link>
+
           <CustomButton label="Send Reset Link" />
 
-          <Link href="/(auth)/sigin-in">
-            <Text style={styles.helper}>
-              Back to <Text style={styles.link}>Sign in</Text>
+          <Link href="/(auth)/sigin-up" style={styles.signUpRow}>
+            <Text style={styles.signUpText}>
+              New here? <Text style={styles.signUpTextHighlight}>Create an account</Text>
             </Text>
           </Link>
         </View>

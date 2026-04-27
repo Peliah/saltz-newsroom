@@ -23,13 +23,14 @@ export default function SignUpScreen() {
             <CustomInput placeholder="Full name" />
             <CustomInput placeholder="Email" keyboardType="email-address" />
             <CustomInput placeholder="Password" secureTextEntry />
+            <CustomInput placeholder="Confirm password" secureTextEntry />
           </View>
 
           <CustomButton label="Create Account" onPress={() => router.replace('/(tabs)')} />
 
-          <Link href="/(auth)/sigin-in">
-            <Text style={styles.helper}>
-              Already have an account? <Text style={styles.link}>Sign in</Text>
+          <Link href="/(auth)/sigin-in" style={styles.signUpRow}>
+            <Text style={styles.signUpText}>
+              Already have an account? <Text style={styles.signUpTextHighlight}>Sign in</Text>
             </Text>
           </Link>
         </View>
