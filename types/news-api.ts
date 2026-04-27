@@ -1,5 +1,4 @@
-
-export type NewsApiArticle = {
+export type Article = {
   source?: { id?: string | null; name?: string | null };
   author?: string | null;
   title: string | null;
@@ -10,15 +9,15 @@ export type NewsApiArticle = {
   content?: string | null;
 };
 
-export type NewsApiListResponse = {
+export type ArticleList = {
   status: string;
   totalResults?: number;
-  articles?: NewsApiArticle[];
+  articles?: Article[];
   code?: string;
   message?: string;
 };
 
-export type NewsApiHeadlineCategory =
+export type HeadlineCategory =
   | 'business'
   | 'entertainment'
   | 'general'
@@ -27,8 +26,8 @@ export type NewsApiHeadlineCategory =
   | 'sports'
   | 'technology';
 
-export type TopHeadlinesParams = {
+export type HeadlineParams = {
   country: string;
-  category?: NewsApiHeadlineCategory;
+  category?: HeadlineCategory;
   pageSize: number;
 };

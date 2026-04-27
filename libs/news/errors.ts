@@ -1,35 +1,35 @@
-import type { NewsApiListResponse } from '@/types/news-api';
+import type { ArticleList } from '@/types/news-api';
 
-export class NewsApiError extends Error {
+export class NewsError extends Error {
   readonly code?: string;
   readonly statusCode: number;
 
   constructor(message: string, options: { code?: string; statusCode: number }) {
     super(message);
-    this.name = 'NewsApiError';
+    this.name = 'NewsError';
     this.code = options.code;
     this.statusCode = options.statusCode;
   }
 
-  static fromResponseBody(body: NewsApiListResponse, statusCode: number): NewsApiError {
+  static fromBody(body: ArticleList, statusCode: number): NewsError {
     const message = body.message ?? 'News request failed';
     const code = body.code;
-    return new NewsApiError(message, { code, statusCode });
+    return new NewsError(message, { code, statusCode });
   }
 }
 
-export function isNewsApiError(e: unknown): e is NewsApiError {
-  return e instanceof NewsApiError;
+export function isNewsError(e: unknown): e is NewsError {
+  return e instanceof NewsError;
 }
 
 export function isRateLimited(e: unknown): boolean {
-  if (!isNewsApiError(e)) return false;
+  if (!isNewsError(e)) return false;
   if (e.statusCode === 429) return true;
   return e.code === 'rateLimited' || e.message.toLowerCase().includes('rate');
 }
 
-export function getNewsApiUserMessage(e: unknown): string {
-  if (isNewsApiError(e)) return e.message;
+export function formatError(e: unknown): string {
+  if (isNewsError(e)) return e.message;
   if (e instanceof Error) return e.message;
   return 'Something went wrong';
 }
