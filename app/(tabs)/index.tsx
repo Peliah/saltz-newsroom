@@ -1,34 +1,151 @@
-import { Link } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
-import { homeStyles as styles } from '@/stylesheet/home.styles';
+import { useMemo, useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
+
+import { CategoryTabs } from '@/components/feed/category-tabs';
+import { FeaturedFeedCard, type FeedItem } from '@/components/feed/featured-feed-card';
+import { FeedGridCard } from '@/components/feed/feed-grid-card';
+import { FeedsEmptyState } from '@/components/feed/feeds-empty-state';
+import { AuthFooter } from '@/components/ui/auth-footer';
+import { AuthHeader } from '@/components/ui/auth-header';
+import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
+
+const categories = [
+  'Top Stories',
+  'Business',
+  'Technology',
+  'World',
+  'Sports',
+  'Science',
+  'Health',
+  'Entertainment',
+];
+
+const feedItems: FeedItem[] = [
+  {
+    id: 'featured',
+    title: 'This ultra-compact and powerful Anker charger has dropped to its best price of the year',
+    description: 'Two USB-C ports and 47W of power.',
+    source: 'Android Police',
+    publishedAgo: 'about 12 hours ago',
+    imageUrl: 'https://picsum.photos/900/520?random=1',
+    categoryTag: 'Technology',
+    labelTag: 'Featured',
+  },
+  {
+    id: '2',
+    title: 'DJI Launches Beginner-Friendly Camera Drone Series with Lito X1 and Lito 1',
+    description: 'Creators now have an accessible option for filming.',
+    source: 'The Manila Times',
+    publishedAgo: 'about 12 hours ago',
+    imageUrl: 'https://picsum.photos/500/320?random=2',
+    categoryTag: 'Technology',
+  },
+  {
+    id: '3',
+    title: 'Windows 11 April update reportedly triggers boot loops and BSOD crashes',
+    description: "Microsoft's April 2026 Windows 11 update has users talking.",
+    source: 'Sportskeeda Tech',
+    publishedAgo: 'about 12 hours ago',
+    imageUrl: 'https://picsum.photos/500/320?random=3',
+    categoryTag: 'Technology',
+  },
+  {
+    id: '4',
+    title: 'Friendly Camera Drone Series with Lito X1 and Lito 1',
+    description: 'Creators now have an accessible option for filming.',
+    source: 'Thailand Business News',
+    publishedAgo: 'about 12 hours ago',
+    imageUrl: 'https://picsum.photos/500/320?random=4',
+    categoryTag: 'Business',
+  },
+  {
+    id: '5',
+    title: 'OLED banding is worse than burn-in, and most TV shoppers have no idea it exists',
+    description: "There's one display technique I worry about even more.",
+    source: 'MakeUseOf',
+    publishedAgo: 'about 12 hours ago',
+    imageUrl: 'https://picsum.photos/500/320?random=5',
+    categoryTag: 'Top Stories',
+  },
+  {
+    id: '6',
+    title: 'Casio to release G-SHOCK with heart rate monitoring and tide graph',
+    description: 'Casio Computer Co. has announced the latest smartwatch lineup.',
+    source: 'Japan Today',
+    publishedAgo: 'about 12 hours ago',
+    imageUrl: 'https://picsum.photos/500/320?random=6',
+    categoryTag: 'World',
+  },
+  {
+    id: '7',
+    title: 'PlayStation gets new DRM update and your PS5 games can vanish after 30 days',
+    description: 'Numerous users on Reddit and X suggest Sony changed licensing checks.',
+    source: 'Sportskeeda Tech',
+    publishedAgo: 'about 12 hours ago',
+    imageUrl: 'https://picsum.photos/500/320?random=7',
+    categoryTag: 'Sports',
+  },
+  {
+    id: '8',
+    title: 'Final Fantasy XIV Evangelion crossover revealed as 24-player raid series',
+    description: 'FFXIV confirms Evangelion crossover in the Evercold expansion.',
+    source: 'The Express Tribune',
+    publishedAgo: 'about 12 hours ago',
+    imageUrl: 'https://picsum.photos/500/320?random=8',
+    categoryTag: 'Entertainment',
+  },
+];
 
 export default function HomeScreen() {
+  const [activeCategory, setActiveCategory] = useState('Technology');
+  const filteredItems = useMemo(
+    () =>
+      activeCategory === 'Top Stories'
+        ? feedItems
+        : feedItems.filter((item) => item.categoryTag === activeCategory),
+    [activeCategory]
+  );
+
+  const featuredItem = filteredItems[0];
+  const gridItems = filteredItems.slice(1);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Saltz Newsroom</Text>
-      <Text style={styles.body}>Top stories, events, and saved reads in one place.</Text>
+    <View style={styles.screen}>
+      <AuthHeader />
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}>
+        <CategoryTabs
+          categories={categories}
+          activeCategory={activeCategory}
+          onSelectCategory={setActiveCategory}
+        />
 
-      <View style={styles.card}>
-        <Text style={styles.subtitle}>Today</Text>
-        <Text style={styles.body}>3 breaking stories and 2 upcoming events are waiting for you.</Text>
-      </View>
+        <View style={styles.feedContainer}>
+          <View style={styles.titleRow}>
+            <Text style={styles.sectionText}>Section</Text>
+            <Text style={styles.headingText}>{activeCategory}</Text>
+          </View>
 
-      <View style={styles.actionRow}>
-        <Link href="/(tabs)/search" asChild>
-          <Pressable style={styles.action}>
-            <Text style={styles.actionText}>Search News</Text>
-          </Pressable>
-        </Link>
-        <Link href="/(tabs)/saved" asChild>
-          <Pressable style={styles.action}>
-            <Text style={styles.actionText}>Open Saved</Text>
-          </Pressable>
-        </Link>
-      </View>
+          {featuredItem ? (
+            <>
+              <FeaturedFeedCard item={featuredItem} />
+              {gridItems.length > 0 ? (
+                <View style={styles.grid}>
+                  {gridItems.map((item) => (
+                    <FeedGridCard key={item.id} item={item} />
+                  ))}
+                </View>
+              ) : null}
+            </>
+          ) : (
+            <FeedsEmptyState category={activeCategory} />
+          )}
+        </View>
 
-      <Link href="/(auth)/sigin-in">
-        <Text style={styles.link}>Go to Sign in flow</Text>
-      </Link>
+        <AuthFooter />
+      </ScrollView>
     </View>
   );
 }
