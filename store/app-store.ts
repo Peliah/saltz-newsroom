@@ -1,6 +1,4 @@
-type Session = {
-  isAuthenticated: boolean;
-};
+import type { Session } from '@/types/session';
 
 const sessionState: Session = {
   isAuthenticated: false,

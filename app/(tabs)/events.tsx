@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
 import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { CalendarClock, MapPin, SlidersHorizontal } from 'lucide-react-native';
+import { useMemo, useState } from 'react';
 import { Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
 import { DateField } from '@/components/events/date-field';
@@ -8,23 +8,21 @@ import { EventsEmptyState } from '@/components/events/events-empty-state';
 import { FilterChip } from '@/components/events/filter-chip';
 import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
+import {
+  eventCities,
+  eventFilterOptions,
+  eventTypeOptions,
+  eventWhenOptions,
+} from '@/data/events';
+import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { eventsStyles as styles } from '@/stylesheet/events.styles';
 
-const CITIES = [
-  'Lagos · Nigeria',
-  'Abuja · Nigeria',
-  'Nairobi · Kenya',
-  'Cape Town · South Africa',
-  'Accra · Ghana',
-];
-const WHEN_OPTIONS = ['Any time', 'Today', 'This week', 'This month'];
-const TYPE_OPTIONS = ['All', 'Conference', 'Meetup', 'Hackathon', 'Workshop', 'Summit'];
-const FILTER_OPTIONS = ['All', 'Conference', 'Meetup', 'Hackathon', 'Workshop', 'Summit'];
 export default function EventsScreen() {
-  const [selectedCity, setSelectedCity] = useState(CITIES[0]);
+  const headerOffset = useAuthHeaderOffset();
+  const [selectedCity, setSelectedCity] = useState(eventCities[0]);
   const [manualCity, setManualCity] = useState('');
   const [country, setCountry] = useState('Nigeria');
-  const [selectedWhen, setSelectedWhen] = useState('Any time');
+  const [selectedWhen, setSelectedWhen] = useState(eventWhenOptions[0]);
   const [selectedType, setSelectedType] = useState('All');
   const [selectedFilter, setSelectedFilter] = useState('All');
   const [sortBy, setSortBy] = useState('Soonest');
@@ -68,7 +66,7 @@ export default function EventsScreen() {
     <View style={styles.screen}>
       <AuthHeader />
       <ScrollView
-        style={styles.scroll}
+        style={[styles.scroll, { paddingTop: headerOffset }]}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
@@ -83,13 +81,13 @@ export default function EventsScreen() {
           </Text>
           <View style={styles.divider} />
 
-          <Pressable style={styles.locationButton} onPress={() => setSelectedCity(CITIES[0])}>
+          <Pressable style={styles.locationButton} onPress={() => setSelectedCity(eventCities[0])}>
             <MapPin size={12} color="#F0F2F5" strokeWidth={1.75} />
             <Text style={styles.locationButtonText}>Use my location</Text>
           </Pressable>
 
           <View style={styles.chipWrap}>
-            {CITIES.map((city) => (
+            {eventCities.map((city) => (
               <FilterChip
                 key={city}
                 label={city}
@@ -121,7 +119,7 @@ export default function EventsScreen() {
 
           <Text style={styles.sectionLabel}>When</Text>
           <View style={styles.chipWrap}>
-            {WHEN_OPTIONS.map((option) => (
+            {eventWhenOptions.map((option) => (
               <FilterChip
                 key={option}
                 label={option}
@@ -133,7 +131,7 @@ export default function EventsScreen() {
 
           <Text style={styles.sectionLabel}>Type</Text>
           <View style={styles.chipWrap}>
-            {TYPE_OPTIONS.map((option) => (
+            {eventTypeOptions.map((option) => (
               <FilterChip
                 key={option}
                 label={option}
@@ -160,7 +158,7 @@ export default function EventsScreen() {
             </View>
 
             <View style={styles.chipWrap}>
-              {FILTER_OPTIONS.map((option) => (
+              {eventFilterOptions.map((option) => (
                 <FilterChip
                   key={option}
                   label={option}
@@ -207,7 +205,7 @@ export default function EventsScreen() {
               onTryAgain={() => {
                 setSelectedFilter('All');
                 setSelectedType('All');
-                setSelectedWhen('Any time');
+                setSelectedWhen(eventWhenOptions[0]);
                 setFromDate(null);
                 setToDate(null);
               }}

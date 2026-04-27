@@ -1,0 +1,3 @@
+export const AUTH_HEADER_INNER_HEIGHT = 52;
+
+export const AUTH_SCREEN_CONTENT_EXTRA_TOP = 20;

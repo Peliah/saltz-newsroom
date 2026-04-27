@@ -1,11 +1,22 @@
 import { Bell, LogOut } from 'lucide-react-native';
 import { Image, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { authStyles as styles } from '@/stylesheet/auth.styles';
 
 export function AuthHeader() {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.header}>
+    <View
+      style={[
+        styles.header,
+        {
+          paddingTop: insets.top,
+          paddingLeft: 8 + insets.left,
+          paddingRight: 8 + insets.right,
+        },
+      ]}>
       <View style={styles.headerInner}>
         <View style={styles.brandRow}>
           <View style={styles.logoBox}>

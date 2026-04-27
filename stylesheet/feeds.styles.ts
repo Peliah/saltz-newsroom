@@ -6,7 +6,7 @@ export const feedsStyles = StyleSheet.create({
     backgroundColor: '#0C0D0F',
   },
   content: {
-    paddingTop: 52,
+    paddingTop: 0,
   },
   scrollContent: {
     paddingBottom: 50,
@@ -47,6 +47,7 @@ export const feedsStyles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 16,
     gap: 16,
+    overflow: 'hidden',
   },
   titleRow: {
     paddingBottom: 12,

@@ -1,15 +1,31 @@
 import { Image } from 'expo-image';
 import { Bookmark, Clock3 } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 
+import { useSubtlePressScale } from '@/hooks/use-subtle-press';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
 
-import type { FeedItem } from './featured-feed-card';
+import type { FeedItem } from '@/types/feed';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type FeedGridCardProps = {
   item: FeedItem;
   fullWidth?: boolean;
 };
+
+function SaveButton() {
+  const { animatedStyle, onPressIn, onPressOut } = useSubtlePressScale();
+  return (
+    <AnimatedPressable
+      style={[styles.gridSaveButton, animatedStyle]}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}>
+      <Bookmark size={16} color="#F0F2F5" strokeWidth={1.5} />
+    </AnimatedPressable>
+  );
+}
 
 export function FeedGridCard({ item, fullWidth = false }: FeedGridCardProps) {
   return (
@@ -20,9 +36,7 @@ export function FeedGridCard({ item, fullWidth = false }: FeedGridCardProps) {
           style={[styles.gridImage, fullWidth && styles.fullWidthImage]}
           contentFit="cover"
         />
-        <Pressable style={styles.gridSaveButton}>
-          <Bookmark size={16} color="#F0F2F5" strokeWidth={1.5} />
-        </Pressable>
+        <SaveButton />
       </View>
 
       <View style={styles.gridContent}>

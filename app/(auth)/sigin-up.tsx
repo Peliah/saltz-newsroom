@@ -5,14 +5,17 @@ import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
 import { CustomButton } from '@/components/ui/custom-button';
 import { CustomInput } from '@/components/ui/custom-input';
+import { useAuthScreenContentPaddingTop } from '@/hooks/use-auth-header-offset';
 import { authStyles as styles } from '@/stylesheet/auth.styles';
 
 export default function SignUpScreen() {
+  const contentPaddingTop = useAuthScreenContentPaddingTop();
+
   return (
     <View style={styles.screen}>
       <AuthHeader />
 
-      <View style={styles.content}>
+      <View style={[styles.content, { paddingTop: contentPaddingTop }]}>
         <View style={styles.card}>
           <View style={styles.divider}>
             <Text style={styles.title}>Create Account</Text>

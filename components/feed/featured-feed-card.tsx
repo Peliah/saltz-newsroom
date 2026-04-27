@@ -1,23 +1,29 @@
 import { Image } from 'expo-image';
 import { Bookmark, Clock3 } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 
+import { useSubtlePressScale } from '@/hooks/use-subtle-press';
+import type { FeedItem } from '@/types/feed';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
-
-export type FeedItem = {
-  id: string;
-  title: string;
-  description: string;
-  source: string;
-  publishedAgo: string;
-  imageUrl: string;
-  categoryTag?: string;
-  labelTag?: string;
-};
 
 type FeaturedFeedCardProps = {
   item: FeedItem;
 };
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+function FeaturedSaveButton() {
+  const { animatedStyle, onPressIn, onPressOut } = useSubtlePressScale();
+  return (
+    <AnimatedPressable
+      style={[styles.saveButton, animatedStyle]}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}>
+      <Bookmark size={16} color="#F0F2F5" strokeWidth={1.5} />
+    </AnimatedPressable>
+  );
+}
 
 export function FeaturedFeedCard({ item }: FeaturedFeedCardProps) {
   return (
@@ -43,9 +49,7 @@ export function FeaturedFeedCard({ item }: FeaturedFeedCardProps) {
         </View>
       </View>
 
-      <Pressable style={styles.saveButton}>
-        <Bookmark size={16} color="#F0F2F5" strokeWidth={1.5} />
-      </Pressable>
+      <FeaturedSaveButton />
     </View>
   );
 }

@@ -1,147 +1,115 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import Animated, {
+    Easing,
+    FadeInDown,
+    FadeOut,
+    SlideInLeft,
+    SlideInRight,
+} from 'react-native-reanimated';
 
 import { CategoryTabs } from '@/components/feed/category-tabs';
-import { FeaturedFeedCard, type FeedItem } from '@/components/feed/featured-feed-card';
+import { FeaturedFeedCard } from '@/components/feed/featured-feed-card';
 import { FeedGridCard } from '@/components/feed/feed-grid-card';
 import { FeedsEmptyState } from '@/components/feed/feeds-empty-state';
 import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
+import { feedCategories, mockFeedItems } from '@/data/feed';
+import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
-
-const categories = [
-  'Top Stories',
-  'Business',
-  'Technology',
-  'World',
-  'Sports',
-  'Science',
-  'Health',
-  'Entertainment',
-];
-
-const feedItems: FeedItem[] = [
-  {
-    id: 'featured',
-    title: 'This ultra-compact and powerful Anker charger has dropped to its best price of the year',
-    description: 'Two USB-C ports and 47W of power.',
-    source: 'Android Police',
-    publishedAgo: 'about 12 hours ago',
-    imageUrl: 'https://picsum.photos/900/520?random=1',
-    categoryTag: 'Technology',
-    labelTag: 'Featured',
-  },
-  {
-    id: '2',
-    title: 'DJI Launches Beginner-Friendly Camera Drone Series with Lito X1 and Lito 1',
-    description: 'Creators now have an accessible option for filming.',
-    source: 'The Manila Times',
-    publishedAgo: 'about 12 hours ago',
-    imageUrl: 'https://picsum.photos/500/320?random=2',
-    categoryTag: 'Technology',
-  },
-  {
-    id: '3',
-    title: 'Windows 11 April update reportedly triggers boot loops and BSOD crashes',
-    description: "Microsoft's April 2026 Windows 11 update has users talking.",
-    source: 'Sportskeeda Tech',
-    publishedAgo: 'about 12 hours ago',
-    imageUrl: 'https://picsum.photos/500/320?random=3',
-    categoryTag: 'Technology',
-  },
-  {
-    id: '4',
-    title: 'Friendly Camera Drone Series with Lito X1 and Lito 1',
-    description: 'Creators now have an accessible option for filming.',
-    source: 'Thailand Business News',
-    publishedAgo: 'about 12 hours ago',
-    imageUrl: 'https://picsum.photos/500/320?random=4',
-    categoryTag: 'Business',
-  },
-  {
-    id: '5',
-    title: 'OLED banding is worse than burn-in, and most TV shoppers have no idea it exists',
-    description: "There's one display technique I worry about even more.",
-    source: 'MakeUseOf',
-    publishedAgo: 'about 12 hours ago',
-    imageUrl: 'https://picsum.photos/500/320?random=5',
-    categoryTag: 'Top Stories',
-  },
-  {
-    id: '6',
-    title: 'Casio to release G-SHOCK with heart rate monitoring and tide graph',
-    description: 'Casio Computer Co. has announced the latest smartwatch lineup.',
-    source: 'Japan Today',
-    publishedAgo: 'about 12 hours ago',
-    imageUrl: 'https://picsum.photos/500/320?random=6',
-    categoryTag: 'World',
-  },
-  {
-    id: '7',
-    title: 'PlayStation gets new DRM update and your PS5 games can vanish after 30 days',
-    description: 'Numerous users on Reddit and X suggest Sony changed licensing checks.',
-    source: 'Sportskeeda Tech',
-    publishedAgo: 'about 12 hours ago',
-    imageUrl: 'https://picsum.photos/500/320?random=7',
-    categoryTag: 'Sports',
-  },
-  {
-    id: '8',
-    title: 'Final Fantasy XIV Evangelion crossover revealed as 24-player raid series',
-    description: 'FFXIV confirms Evangelion crossover in the Evercold expansion.',
-    source: 'The Express Tribune',
-    publishedAgo: 'about 12 hours ago',
-    imageUrl: 'https://picsum.photos/500/320?random=8',
-    categoryTag: 'Entertainment',
-  },
-];
+import type { FeedNavDirection, FeedNavState } from '@/types/feed';
 
 export default function HomeScreen() {
-  const [activeCategory, setActiveCategory] = useState('Technology');
+  const headerOffset = useAuthHeaderOffset();
+  const [feedNav, setFeedNav] = useState<FeedNavState>({
+    category: 'Top Stories',
+    dir: 'initial',
+  });
+  const activeCategory = feedNav.category;
+
+  const selectCategory = useCallback((category: string) => {
+    setFeedNav((prev) => {
+      if (category === prev.category) return prev;
+      const oldIdx = feedCategories.indexOf(prev.category);
+      const newIdx = feedCategories.indexOf(category);
+      let dir: FeedNavDirection = 'initial';
+      if (newIdx > oldIdx) dir = 'forward';
+      else if (newIdx < oldIdx) dir = 'back';
+      return { category, dir };
+    });
+  }, []);
+
   const filteredItems = useMemo(
     () =>
       activeCategory === 'Top Stories'
-        ? feedItems
-        : feedItems.filter((item) => item.categoryTag === activeCategory),
+        ? mockFeedItems
+        : mockFeedItems.filter((item) => item.categoryTag === activeCategory),
     [activeCategory]
   );
 
   const featuredItem = filteredItems[0];
   const gridItems = filteredItems.slice(1);
 
+  const feedEntering = useMemo(() => {
+    const easing = Easing.out(Easing.cubic);
+    const duration = 360;
+    if (feedNav.dir === 'back') {
+      return SlideInLeft.duration(duration).easing(easing);
+    }
+    if (feedNav.dir === 'forward') {
+      return SlideInRight.duration(duration).easing(easing);
+    }
+    return FadeInDown.duration(420)
+      .easing(easing)
+      .withInitialValues({
+        opacity: 0.92,
+        transform: [{ translateY: 6 }],
+      });
+  }, [feedNav.dir]);
+
+  const feedExiting = useMemo(
+    () => FadeOut.duration(240).easing(Easing.in(Easing.cubic)),
+    []
+  );
+
   return (
     <View style={styles.screen}>
       <AuthHeader />
       <ScrollView
-        style={styles.content}
+        style={[styles.content, { paddingTop: headerOffset }]}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
         <CategoryTabs
-          categories={categories}
+          categories={feedCategories}
           activeCategory={activeCategory}
-          onSelectCategory={setActiveCategory}
+          onSelectCategory={selectCategory}
         />
 
         <View style={styles.feedContainer}>
-          <View style={styles.titleRow}>
-            <Text style={styles.sectionText}>Section</Text>
-            <Text style={styles.headingText}>{activeCategory}</Text>
-          </View>
+          <Animated.View
+            key={activeCategory}
+            entering={feedEntering}
+            exiting={feedExiting}>
+            <View style={styles.titleRow}>
+              <Text style={styles.sectionText}>Section</Text>
+              <Text style={styles.headingText}>{activeCategory}</Text>
+            </View>
 
-          {featuredItem ? (
-            <>
-              <FeaturedFeedCard item={featuredItem} />
-              {gridItems.length > 0 ? (
-                <View style={styles.grid}>
-                  {gridItems.map((item) => (
-                    <FeedGridCard key={item.id} item={item} />
-                  ))}
-                </View>
-              ) : null}
-            </>
-          ) : (
-            <FeedsEmptyState category={activeCategory} />
-          )}
+            {featuredItem ? (
+              <>
+                <FeaturedFeedCard item={featuredItem} />
+                {gridItems.length > 0 ? (
+                  <View style={styles.grid}>
+                    {gridItems.map((item) => (
+                      <FeedGridCard key={item.id} item={item} />
+                    ))}
+                  </View>
+                ) : null}
+              </>
+            ) : (
+              <FeedsEmptyState category={activeCategory} />
+            )}
+          </Animated.View>
         </View>
 
         <AuthFooter />

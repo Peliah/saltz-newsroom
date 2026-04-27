@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const savedStyles = StyleSheet.create({
   body: {
-    paddingTop: 52,
+    paddingTop: 0,
   },
   content: {
     paddingHorizontal: 8,

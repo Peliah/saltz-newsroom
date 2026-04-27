@@ -8,7 +8,6 @@ export const authStyles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 16,
-    paddingTop: 72,
     justifyContent: 'center',
   },
   card: {
@@ -142,9 +141,8 @@ export const authStyles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 52,
     zIndex: 10,
-    paddingHorizontal: 8,
+    paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#27292D',
     backgroundColor: 'rgba(12, 13, 15, 0.95)',

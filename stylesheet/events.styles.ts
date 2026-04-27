@@ -6,7 +6,7 @@ export const eventsStyles = StyleSheet.create({
     backgroundColor: '#0C0D0F',
   },
   scroll: {
-    paddingTop: 52,
+    paddingTop: 0,
   },
   scrollContent: {
     paddingBottom: 40,
