@@ -8,13 +8,18 @@ import type { FeedItem } from './featured-feed-card';
 
 type FeedGridCardProps = {
   item: FeedItem;
+  fullWidth?: boolean;
 };
 
-export function FeedGridCard({ item }: FeedGridCardProps) {
+export function FeedGridCard({ item, fullWidth = false }: FeedGridCardProps) {
   return (
-    <View style={styles.gridCard}>
+    <View style={[styles.gridCard, fullWidth && styles.fullWidthCard]}>
       <View style={styles.gridImageWrap}>
-        <Image source={{ uri: item.imageUrl }} style={styles.gridImage} contentFit="cover" />
+        <Image
+          source={{ uri: item.imageUrl }}
+          style={[styles.gridImage, fullWidth && styles.fullWidthImage]}
+          contentFit="cover"
+        />
         <Pressable style={styles.gridSaveButton}>
           <Bookmark size={16} color="#F0F2F5" strokeWidth={1.5} />
         </Pressable>

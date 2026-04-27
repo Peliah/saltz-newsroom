@@ -168,6 +168,9 @@ export const feedsStyles = StyleSheet.create({
     borderColor: '#27292D',
     backgroundColor: '#131417',
   },
+  fullWidthCard: {
+    width: '100%',
+  },
   gridImageWrap: {
     position: 'relative',
   },
@@ -175,6 +178,9 @@ export const feedsStyles = StyleSheet.create({
     width: '100%',
     height: 100,
     backgroundColor: '#1E1F23',
+  },
+  fullWidthImage: {
+    height: 160,
   },
   gridSaveButton: {
     position: 'absolute',
