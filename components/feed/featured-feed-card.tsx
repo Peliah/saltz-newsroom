@@ -4,8 +4,8 @@ import { Pressable, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { useSubtlePressScale } from '@/hooks/use-subtle-press';
-import type { FeedItem } from '@/types/feed';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
+import type { FeedItem } from '@/types/feed';
 
 type FeaturedFeedCardProps = {
   item: FeedItem;

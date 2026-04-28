@@ -1,34 +1,55 @@
+import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
-import { ScrollView, Text, TextInput, View } from 'react-native';
+import { Platform, RefreshControl, ScrollView, Text, TextInput, View } from 'react-native';
 
-import { mockSearchArticles } from '@/data/search';
-import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { FeedGridCard } from '@/components/feed/feed-grid-card';
 import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
+import { LoadingBlock } from '@/components/ui/loading-block';
 import { OfflineBanner } from '@/components/ui/offline-banner';
+import { StateMessage } from '@/components/ui/state-message';
+import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
+import { fetchSearch } from '@/libs/news/client';
+import { normalizeQuery, searchKey } from '@/libs/news/query-keys';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
 import { searchStyles } from '@/stylesheet/search.styles';
+
+const MIN_QUERY_LEN = 2;
 
 export default function SearchScreen() {
   const headerOffset = useAuthHeaderOffset();
   const [query, setQuery] = useState('');
-  const filtered = useMemo(
-    () =>
-      mockSearchArticles.filter((article) =>
-        `${article.title} ${article.description} ${article.source}`
-          .toLowerCase()
-          .includes(query.toLowerCase())
-      ),
-    [query]
-  );
+  const debounced = useDebouncedValue(query, 400);
+  const normalized = useMemo(() => normalizeQuery(debounced), [debounced]);
+  const canSearch = normalized.length >= MIN_QUERY_LEN;
+
+  const { data, isPending, isError, error, refetch, isRefetching } = useQuery({
+    queryKey: searchKey(normalized),
+    queryFn: () => fetchSearch(normalized),
+    enabled: canSearch,
+  });
+
+  const results = data ?? [];
+  const resultsLabel = !canSearch
+    ? 'Type at least 2 characters to search'
+    : `${results.length} results for "${debounced.trim() || '…'}"`;
 
   return (
     <View style={styles.screen}>
       <AuthHeader />
       <ScrollView
         style={[searchStyles.body, { paddingTop: headerOffset }]}
-        contentContainerStyle={searchStyles.content}>
+        contentContainerStyle={searchStyles.content}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={() => void refetch()}
+            enabled={canSearch}
+            tintColor="#EE343B"
+            colors={Platform.OS === 'android' ? ['#EE343B'] : undefined}
+          />
+        }>
         <OfflineBanner />
         <View style={searchStyles.headerCard}>
           <Text style={searchStyles.kicker}>Search</Text>
@@ -42,16 +63,29 @@ export default function SearchScreen() {
               style={searchStyles.searchInput}
             />
           </View>
-          <Text style={searchStyles.resultsCount}>
-            {filtered.length} results for &quot;{query || 'all'}&quot;
-          </Text>
+          <Text style={searchStyles.resultsCount}>{resultsLabel}</Text>
         </View>
 
-        <View style={searchStyles.listStack}>
-          {filtered.map((item) => (
-            <FeedGridCard key={item.id} item={item} fullWidth />
-          ))}
-        </View>
+        {!canSearch ? null : isPending ? (
+          <LoadingBlock />
+        ) : isError ? (
+          <StateMessage title="Search failed" error={error} onRetry={() => void refetch()} />
+        ) : results.length === 0 ? (
+          <View style={{ paddingHorizontal: 8, marginBottom: 16 }}>
+            <View style={styles.emptyStateCard}>
+              <Text style={styles.emptyStateTitle}>No matches</Text>
+              <Text style={styles.emptyStateDescription}>
+                Try different words or a shorter phrase.
+              </Text>
+            </View>
+          </View>
+        ) : (
+          <View style={searchStyles.listStack}>
+            {results.map((item) => (
+              <FeedGridCard key={item.id} item={item} fullWidth />
+            ))}
+          </View>
+        )}
 
         <AuthFooter />
       </ScrollView>

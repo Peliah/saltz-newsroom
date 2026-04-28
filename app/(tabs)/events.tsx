@@ -1,4 +1,5 @@
 import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import * as Location from 'expo-location';
 import { CalendarClock, MapPin, SlidersHorizontal } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
@@ -9,10 +10,10 @@ import { FilterChip } from '@/components/events/filter-chip';
 import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
 import {
-  eventCities,
-  eventFilterOptions,
-  eventTypeOptions,
-  eventWhenOptions,
+    eventCities,
+    eventFilterOptions,
+    eventTypeOptions,
+    eventWhenOptions,
 } from '@/data/events';
 import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { eventsStyles as styles } from '@/stylesheet/events.styles';
@@ -30,6 +31,7 @@ export default function EventsScreen() {
   const [toDate, setToDate] = useState<Date | null>(null);
   const [pickerTarget, setPickerTarget] = useState<'from' | 'to' | null>(null);
   const [pickerValue, setPickerValue] = useState(new Date());
+  const [locationError, setLocationError] = useState<string | null>(null);
 
   const hasResults = useMemo(
     () => !(selectedFilter !== 'All' && selectedType !== 'All' && selectedFilter !== selectedType),
@@ -45,6 +47,21 @@ export default function EventsScreen() {
     const initialValue = target === 'from' ? fromDate : toDate;
     setPickerValue(initialValue ?? new Date());
     setPickerTarget(target);
+  };
+
+  const onUseMyLocation = async () => {
+    setLocationError(null);
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setLocationError('Location permission denied. Enable it in Settings to use this.');
+        return;
+      }
+      await Location.getCurrentPositionAsync({});
+      setSelectedCity('Near you');
+    } catch (e) {
+      setLocationError(e instanceof Error ? e.message : 'Could not get location.');
+    }
   };
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
@@ -81,10 +98,11 @@ export default function EventsScreen() {
           </Text>
           <View style={styles.divider} />
 
-          <Pressable style={styles.locationButton} onPress={() => setSelectedCity(eventCities[0])}>
+          <Pressable style={styles.locationButton} onPress={() => void onUseMyLocation()}>
             <MapPin size={12} color="#F0F2F5" strokeWidth={1.75} />
             <Text style={styles.locationButtonText}>Use my location</Text>
           </Pressable>
+          {locationError ? <Text style={styles.locationError}>{locationError}</Text> : null}
 
           <View style={styles.chipWrap}>
             {eventCities.map((city) => (

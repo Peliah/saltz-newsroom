@@ -40,7 +40,7 @@ export default function TabLayout() {
     <MaterialTopTabsLayout
       tabBarPosition="bottom"
       screenOptions={{
-        swipeEnabled: true,
+        swipeEnabled: false,
         animationEnabled: true,
         tabBarShowIcon: true,
         tabBarActiveTintColor: '#fcfcfc',

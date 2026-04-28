@@ -283,4 +283,11 @@ export const eventsStyles = StyleSheet.create({
     color: '#9498A2',
     fontFamily: 'InterRegular',
   },
+  locationError: {
+    fontSize: 12,
+    lineHeight: 16,
+    color: '#EE343B',
+    fontFamily: 'InterRegular',
+    marginTop: 4,
+  },
 });

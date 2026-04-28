@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Platform, RefreshControl, ScrollView, Text, View } from 'react-native';
 import Animated, {
     Easing,
     FadeInDown,
@@ -14,9 +15,13 @@ import { FeedGridCard } from '@/components/feed/feed-grid-card';
 import { FeedsEmptyState } from '@/components/feed/feeds-empty-state';
 import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
+import { LoadingBlock } from '@/components/ui/loading-block';
 import { OfflineBanner } from '@/components/ui/offline-banner';
-import { feedCategories, mockFeedItems } from '@/data/feed';
+import { StateMessage } from '@/components/ui/state-message';
+import { feedCategories } from '@/data/feed';
 import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
+import { fetchFeed } from '@/libs/news/client';
+import { feedKey } from '@/libs/news/query-keys';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
 import type { FeedNavDirection, FeedNavState } from '@/types/feed';
 
@@ -27,6 +32,15 @@ export default function HomeScreen() {
     dir: 'initial',
   });
   const activeCategory = feedNav.category;
+
+  const { data, isPending, isError, error, refetch, isRefetching } = useQuery({
+    queryKey: feedKey(activeCategory),
+    queryFn: () => fetchFeed(activeCategory),
+  });
+
+  const items = data ?? [];
+  const featuredItem = items[0];
+  const gridItems = items.slice(1);
 
   const selectCategory = useCallback((category: string) => {
     setFeedNav((prev) => {
@@ -39,17 +53,6 @@ export default function HomeScreen() {
       return { category, dir };
     });
   }, []);
-
-  const filteredItems = useMemo(
-    () =>
-      activeCategory === 'Top Stories'
-        ? mockFeedItems
-        : mockFeedItems.filter((item) => item.categoryTag === activeCategory),
-    [activeCategory]
-  );
-
-  const featuredItem = filteredItems[0];
-  const gridItems = filteredItems.slice(1);
 
   const feedEntering = useMemo(() => {
     const easing = Easing.out(Easing.cubic);
@@ -79,7 +82,15 @@ export default function HomeScreen() {
       <ScrollView
         style={[styles.content, { paddingTop: headerOffset }]}
         contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={() => void refetch()}
+            tintColor="#EE343B"
+            colors={Platform.OS === 'android' ? ['#EE343B'] : undefined}
+          />
+        }>
         <OfflineBanner />
         <CategoryTabs
           categories={feedCategories}
@@ -97,7 +108,11 @@ export default function HomeScreen() {
               <Text style={styles.headingText}>{activeCategory}</Text>
             </View>
 
-            {featuredItem ? (
+            {isPending ? (
+              <LoadingBlock />
+            ) : isError ? (
+              <StateMessage error={error} onRetry={() => void refetch()} />
+            ) : featuredItem ? (
               <>
                 <FeaturedFeedCard item={featuredItem} />
                 {gridItems.length > 0 ? (
