@@ -14,6 +14,7 @@ import { FeedGridCard } from '@/components/feed/feed-grid-card';
 import { FeedsEmptyState } from '@/components/feed/feeds-empty-state';
 import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
+import { OfflineBanner } from '@/components/ui/offline-banner';
 import { feedCategories, mockFeedItems } from '@/data/feed';
 import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
@@ -79,6 +80,7 @@ export default function HomeScreen() {
         style={[styles.content, { paddingTop: headerOffset }]}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
+        <OfflineBanner />
         <CategoryTabs
           categories={feedCategories}
           activeCategory={activeCategory}

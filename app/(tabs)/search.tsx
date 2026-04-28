@@ -6,6 +6,7 @@ import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { FeedGridCard } from '@/components/feed/feed-grid-card';
 import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
+import { OfflineBanner } from '@/components/ui/offline-banner';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
 import { searchStyles } from '@/stylesheet/search.styles';
 
@@ -28,6 +29,7 @@ export default function SearchScreen() {
       <ScrollView
         style={[searchStyles.body, { paddingTop: headerOffset }]}
         contentContainerStyle={searchStyles.content}>
+        <OfflineBanner />
         <View style={searchStyles.headerCard}>
           <Text style={searchStyles.kicker}>Search</Text>
           <Text style={searchStyles.title}>Find articles</Text>
