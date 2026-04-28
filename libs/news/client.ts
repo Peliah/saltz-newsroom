@@ -30,8 +30,15 @@ async function request(endpoint: string, params: Record<string, string>): Promis
   return body.articles ?? [];
 }
 
-export async function fetchFeed(tab: string): Promise<FeedItem[]> {
-  const { country, pageSize, category } = paramsForCategory(tab);
+export type FetchFeedOptions = {
+  country?: string;
+};
+
+export async function fetchFeed(tab: string, options?: FetchFeedOptions): Promise<FeedItem[]> {
+  const params = paramsForCategory(tab);
+  const country =
+    options?.country !== undefined && options.country !== '' ? options.country : params.country;
+  const { pageSize, category } = params;
   const rows = await request('top-headlines', {
     country,
     pageSize: String(pageSize),

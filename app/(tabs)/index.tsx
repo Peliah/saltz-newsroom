@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Platform, RefreshControl, ScrollView, Text, View } from 'react-native';
 import Animated, {
     Easing,
@@ -18,6 +18,7 @@ import { AuthHeader } from '@/components/ui/auth-header';
 import { LoadingBlock } from '@/components/ui/loading-block';
 import { OfflineBanner } from '@/components/ui/offline-banner';
 import { StateMessage } from '@/components/ui/state-message';
+import { usePreferences } from '@/context/preferences-context';
 import { feedCategories } from '@/data/feed';
 import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { fetchFeed } from '@/libs/news/client';
@@ -27,15 +28,32 @@ import type { FeedNavDirection, FeedNavState } from '@/types/feed';
 
 export default function HomeScreen() {
   const headerOffset = useAuthHeaderOffset();
+  const { preferences } = usePreferences();
   const [feedNav, setFeedNav] = useState<FeedNavState>({
     category: 'Top Stories',
     dir: 'initial',
   });
   const activeCategory = feedNav.category;
 
+  const visibleCategories = useMemo(() => {
+    const e = preferences.enabledCategories;
+    if (!e.length || e.length === feedCategories.length) return feedCategories;
+    return feedCategories.filter((c) => e.includes(c));
+  }, [preferences.enabledCategories]);
+
+  useEffect(() => {
+    setFeedNav((prev) => {
+      if (visibleCategories.includes(prev.category)) return prev;
+      return { category: visibleCategories[0] ?? 'Top Stories', dir: 'initial' };
+    });
+  }, [visibleCategories]);
+
+  const countryCode = preferences.countryCode;
+
   const { data, isPending, isError, error, refetch, isRefetching } = useQuery({
-    queryKey: feedKey(activeCategory),
-    queryFn: () => fetchFeed(activeCategory),
+    queryKey: feedKey(activeCategory, countryCode),
+    queryFn: () =>
+      fetchFeed(activeCategory, countryCode ? { country: countryCode } : undefined),
   });
 
   const items = data ?? [];
@@ -45,14 +63,14 @@ export default function HomeScreen() {
   const selectCategory = useCallback((category: string) => {
     setFeedNav((prev) => {
       if (category === prev.category) return prev;
-      const oldIdx = feedCategories.indexOf(prev.category);
-      const newIdx = feedCategories.indexOf(category);
+      const oldIdx = visibleCategories.indexOf(prev.category);
+      const newIdx = visibleCategories.indexOf(category);
       let dir: FeedNavDirection = 'initial';
       if (newIdx > oldIdx) dir = 'forward';
       else if (newIdx < oldIdx) dir = 'back';
       return { category, dir };
     });
-  }, []);
+  }, [visibleCategories]);
 
   const feedEntering = useMemo(() => {
     const easing = Easing.out(Easing.cubic);
@@ -93,7 +111,7 @@ export default function HomeScreen() {
         }>
         <OfflineBanner />
         <CategoryTabs
-          categories={feedCategories}
+          categories={visibleCategories}
           activeCategory={activeCategory}
           onSelectCategory={selectCategory}
         />
