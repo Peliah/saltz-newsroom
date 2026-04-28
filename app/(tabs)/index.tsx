@@ -19,6 +19,7 @@ import { LoadingBlock } from '@/components/ui/loading-block';
 import { OfflineBanner } from '@/components/ui/offline-banner';
 import { StateMessage } from '@/components/ui/state-message';
 import { usePreferences } from '@/context/preferences-context';
+import { useSavedArticles } from '@/context/saved-articles-context';
 import { feedCategories } from '@/data/feed';
 import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { fetchFeed } from '@/libs/news/client';
@@ -29,6 +30,7 @@ import type { FeedNavDirection, FeedNavState } from '@/types/feed';
 export default function HomeScreen() {
   const headerOffset = useAuthHeaderOffset();
   const { preferences } = usePreferences();
+  const { isSaved, toggleSaved } = useSavedArticles();
   const [feedNav, setFeedNav] = useState<FeedNavState>({
     category: 'Top Stories',
     dir: 'initial',
@@ -132,11 +134,20 @@ export default function HomeScreen() {
               <StateMessage error={error} onRetry={() => void refetch()} />
             ) : featuredItem ? (
               <>
-                <FeaturedFeedCard item={featuredItem} />
+                <FeaturedFeedCard
+                  item={featuredItem}
+                  saved={isSaved(featuredItem.id)}
+                  onSavePress={() => void toggleSaved(featuredItem)}
+                />
                 {gridItems.length > 0 ? (
                   <View style={styles.grid}>
                     {gridItems.map((item) => (
-                      <FeedGridCard key={item.id} item={item} />
+                      <FeedGridCard
+                        key={item.id}
+                        item={item}
+                        saved={isSaved(item.id)}
+                        onSavePress={() => void toggleSaved(item)}
+                      />
                     ))}
                   </View>
                 ) : null}

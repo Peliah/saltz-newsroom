@@ -1,6 +1,7 @@
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { SQLiteProvider } from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { useEffect } from 'react';
@@ -8,6 +9,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { QueryProvider } from '@/components/providers/query-provider';
 import { PreferencesProvider } from '@/context/preferences-context';
+import { SavedArticlesProvider } from '@/context/saved-articles-context';
+import { migrateSavedArticlesSchema } from '@/libs/db/saved-articles-repo';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,12 +41,17 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <QueryProvider>
         <PreferencesProvider>
-          <Stack>
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-          </Stack>
-          <StatusBar style="auto" />
+          <SQLiteProvider databaseName="saltz-newsroom.db" onInit={migrateSavedArticlesSchema}>
+            <SavedArticlesProvider>
+              <Stack>
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="article/[id]" options={{ headerShown: false }} />
+                <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+              </Stack>
+              <StatusBar style="auto" />
+            </SavedArticlesProvider>
+          </SQLiteProvider>
         </PreferencesProvider>
       </QueryProvider>
     </SafeAreaProvider>

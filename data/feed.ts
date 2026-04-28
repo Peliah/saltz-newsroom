@@ -14,6 +14,7 @@ export const feedCategories: string[] = [
 export const mockFeedItems: FeedItem[] = [
   {
     id: 'featured',
+    articleUrl: 'https://example.com/articles/featured-anker-charger',
     title: 'This ultra-compact and powerful Anker charger has dropped to its best price of the year',
     description: 'Two USB-C ports and 47W of power.',
     source: 'Android Police',
@@ -24,6 +25,7 @@ export const mockFeedItems: FeedItem[] = [
   },
   {
     id: '2',
+    articleUrl: 'https://example.com/articles/dji-lito-drone',
     title: 'DJI Launches Beginner-Friendly Camera Drone Series with Lito X1 and Lito 1',
     description: 'Creators now have an accessible option for filming.',
     source: 'The Manila Times',
@@ -33,6 +35,7 @@ export const mockFeedItems: FeedItem[] = [
   },
   {
     id: '3',
+    articleUrl: 'https://example.com/articles/windows-11-april-update',
     title: 'Windows 11 April update reportedly triggers boot loops and BSOD crashes',
     description: "Microsoft's April 2026 Windows 11 update has users talking.",
     source: 'Sportskeeda Tech',
@@ -42,6 +45,7 @@ export const mockFeedItems: FeedItem[] = [
   },
   {
     id: '4',
+    articleUrl: 'https://example.com/articles/thailand-drone',
     title: 'Friendly Camera Drone Series with Lito X1 and Lito 1',
     description: 'Creators now have an accessible option for filming.',
     source: 'Thailand Business News',
@@ -51,6 +55,7 @@ export const mockFeedItems: FeedItem[] = [
   },
   {
     id: '5',
+    articleUrl: 'https://example.com/articles/oled-banding',
     title: 'OLED banding is worse than burn-in, and most TV shoppers have no idea it exists',
     description: "There's one display technique I worry about even more.",
     source: 'MakeUseOf',
@@ -60,6 +65,7 @@ export const mockFeedItems: FeedItem[] = [
   },
   {
     id: '6',
+    articleUrl: 'https://example.com/articles/casio-gshock-hr',
     title: 'Casio to release G-SHOCK with heart rate monitoring and tide graph',
     description: 'Casio Computer Co. has announced the latest smartwatch lineup.',
     source: 'Japan Today',
@@ -69,6 +75,7 @@ export const mockFeedItems: FeedItem[] = [
   },
   {
     id: '7',
+    articleUrl: 'https://example.com/articles/ps5-drm-update',
     title: 'PlayStation gets new DRM update and your PS5 games can vanish after 30 days',
     description: 'Numerous users on Reddit and X suggest Sony changed licensing checks.',
     source: 'Sportskeeda Tech',
@@ -78,6 +85,7 @@ export const mockFeedItems: FeedItem[] = [
   },
   {
     id: '8',
+    articleUrl: 'https://example.com/articles/ffxiv-evangelion',
     title: 'Final Fantasy XIV Evangelion crossover revealed as 24-player raid series',
     description: 'FFXIV confirms Evangelion crossover in the Evercold expansion.',
     source: 'The Express Tribune',

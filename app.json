@@ -47,7 +47,8 @@
           "locationWhenInUsePermission": "Allow Saltz Newsroom to use your location for nearby event suggestions."
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,

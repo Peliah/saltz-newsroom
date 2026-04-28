@@ -1,17 +1,24 @@
-import { useMemo } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useCallback } from 'react';
+import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 
-import { mockSavedStories } from '@/data/saved';
-import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { FeedGridCard } from '@/components/feed/feed-grid-card';
 import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
+import { useSavedArticles } from '@/context/saved-articles-context';
+import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
 import { savedStyles } from '@/stylesheet/saved.styles';
 
 export default function SavedScreen() {
   const headerOffset = useAuthHeaderOffset();
-  const stories = useMemo(() => mockSavedStories, []);
+  const { items, ready, isSaved, toggleSaved, clearAll } = useSavedArticles();
+
+  const onClearAll = useCallback(() => {
+    Alert.alert('Clear saved articles?', 'This removes all articles saved on this device.', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Clear all', style: 'destructive', onPress: () => void clearAll() },
+    ]);
+  }, [clearAll]);
 
   return (
     <View style={styles.screen}>
@@ -22,15 +29,25 @@ export default function SavedScreen() {
         <View style={savedStyles.headerCard}>
           <Text style={savedStyles.kicker}>Library</Text>
           <Text style={savedStyles.title}>Saved Articles</Text>
-          <Text style={savedStyles.subTitle}>{stories.length} articles saved on this device</Text>
-          <Pressable style={savedStyles.clearAction}>
-            <Text style={savedStyles.clearActionText}>Clear all</Text>
-          </Pressable>
+          <Text style={savedStyles.subTitle}>
+            {ready ? `${items.length} articles saved on this device` : 'Loading your library…'}
+          </Text>
+          {items.length > 0 ? (
+            <Pressable style={savedStyles.clearAction} onPress={onClearAll}>
+              <Text style={savedStyles.clearActionText}>Clear all</Text>
+            </Pressable>
+          ) : null}
         </View>
 
         <View style={savedStyles.listStack}>
-          {stories.map((item) => (
-            <FeedGridCard key={item.id} item={item} fullWidth />
+          {items.map((item) => (
+            <FeedGridCard
+              key={item.id}
+              item={item}
+              fullWidth
+              saved={isSaved(item.id)}
+              onSavePress={() => void toggleSaved(item)}
+            />
           ))}
         </View>
 

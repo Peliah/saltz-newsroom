@@ -36,8 +36,11 @@ export function toFeedItem(
   const source = article.source?.name?.trim() || 'Unknown source';
   const imageUrl = article.urlToImage?.trim() || PLACEHOLDER;
 
+  const articleUrl = article.url?.trim() ?? '';
+
   return {
     id: idFor(article, index),
+    articleUrl,
     title,
     description,
     source,

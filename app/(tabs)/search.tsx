@@ -8,6 +8,7 @@ import { AuthHeader } from '@/components/ui/auth-header';
 import { LoadingBlock } from '@/components/ui/loading-block';
 import { OfflineBanner } from '@/components/ui/offline-banner';
 import { StateMessage } from '@/components/ui/state-message';
+import { useSavedArticles } from '@/context/saved-articles-context';
 import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { fetchSearch } from '@/libs/news/client';
@@ -19,6 +20,7 @@ const MIN_QUERY_LEN = 2;
 
 export default function SearchScreen() {
   const headerOffset = useAuthHeaderOffset();
+  const { isSaved, toggleSaved } = useSavedArticles();
   const [query, setQuery] = useState('');
   const debounced = useDebouncedValue(query, 400);
   const normalized = useMemo(() => normalizeQuery(debounced), [debounced]);
@@ -82,7 +84,13 @@ export default function SearchScreen() {
         ) : (
           <View style={searchStyles.listStack}>
             {results.map((item) => (
-              <FeedGridCard key={item.id} item={item} fullWidth />
+              <FeedGridCard
+                key={item.id}
+                item={item}
+                fullWidth
+                saved={isSaved(item.id)}
+                onSavePress={() => void toggleSaved(item)}
+              />
             ))}
           </View>
         )}

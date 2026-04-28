@@ -1,5 +1,7 @@
 export type FeedItem = {
   id: string;
+  /** Original article URL (empty for some fixtures). */
+  articleUrl: string;
   title: string;
   description: string;
   source: string;
