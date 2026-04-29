@@ -10,4 +10,7 @@ export const routes = {
     search: '/(tabs)/search',
     saved: '/(tabs)/saved',
   },
+  article: {
+    details: '/article/[id]',
+  },
 } as const;

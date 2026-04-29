@@ -37,6 +37,7 @@ export function toFeedItem(
   const imageUrl = article.urlToImage?.trim() || PLACEHOLDER;
 
   const articleUrl = article.url?.trim() ?? '';
+  const publishedAtIso = article.publishedAt?.trim() || undefined;
 
   return {
     id: idFor(article, index),
@@ -45,6 +46,7 @@ export function toFeedItem(
     description,
     source,
     publishedAgo: formatAgo(article.publishedAt ?? undefined),
+    publishedAtIso,
     imageUrl,
     categoryTag: options.categoryTag,
     labelTag: options.labelTag,

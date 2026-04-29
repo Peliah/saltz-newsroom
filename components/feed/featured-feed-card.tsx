@@ -1,33 +1,68 @@
 import { Image } from 'expo-image';
 import { Bookmark, Clock3 } from 'lucide-react-native';
+import { router } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { useSubtlePressScale } from '@/hooks/use-subtle-press';
+import { toArticleRouteParams } from '@/libs/article-route';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
 import type { FeedItem } from '@/types/feed';
 
 type FeaturedFeedCardProps = {
   item: FeedItem;
+  saved?: boolean;
+  onSavePress?: () => void;
+  onPress?: () => void;
 };
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-function FeaturedSaveButton() {
+function FeaturedSaveButton({
+  saved,
+  onPress,
+}: {
+  saved: boolean;
+  onPress: () => void;
+}) {
   const { animatedStyle, onPressIn, onPressOut } = useSubtlePressScale();
   return (
     <AnimatedPressable
       style={[styles.saveButton, animatedStyle]}
       onPressIn={onPressIn}
-      onPressOut={onPressOut}>
-      <Bookmark size={16} color="#F0F2F5" strokeWidth={1.5} />
+      onPressOut={onPressOut}
+      onPress={(event) => {
+        event.stopPropagation();
+        onPress();
+      }}
+      accessibilityLabel={saved ? 'Remove from saved' : 'Save article'}>
+      <Bookmark size={16} color={saved ? '#EE343B' : '#F0F2F5'} strokeWidth={1.5} />
     </AnimatedPressable>
   );
 }
 
-export function FeaturedFeedCard({ item }: FeaturedFeedCardProps) {
+export function FeaturedFeedCard({
+  item,
+  saved = false,
+  onSavePress,
+  onPress,
+}: FeaturedFeedCardProps) {
+  const openDetails = () => {
+    if (onPress) {
+      onPress();
+      return;
+    }
+    router.push({
+      pathname: '/article/[id]',
+      params: toArticleRouteParams(item),
+    });
+  };
+
   return (
-    <View style={styles.featuredCard}>
+    <Pressable
+      style={styles.featuredCard}
+      onPress={openDetails}
+      accessibilityLabel={`Open article: ${item.title}`}>
       <Image source={{ uri: item.imageUrl }} style={styles.featuredImage} contentFit="cover" />
       <View style={styles.imageOverlay}>
         <View style={styles.badgeRow}>
@@ -49,7 +84,7 @@ export function FeaturedFeedCard({ item }: FeaturedFeedCardProps) {
         </View>
       </View>
 
-      <FeaturedSaveButton />
-    </View>
+      {onSavePress ? <FeaturedSaveButton saved={saved} onPress={onSavePress} /> : null}
+    </Pressable>
   );
 }
