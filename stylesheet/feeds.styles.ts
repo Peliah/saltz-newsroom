@@ -75,6 +75,7 @@ export const feedsStyles = StyleSheet.create({
     borderColor: '#27292D',
     backgroundColor: '#131417',
     overflow: 'hidden',
+    marginBottom: 12,
   },
   featuredImage: {
     height: 232,
