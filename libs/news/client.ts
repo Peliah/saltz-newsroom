@@ -5,7 +5,7 @@ import type { FeedItem } from '@/types/feed';
 import type { Article, ArticleList } from '@/types/news-api';
 
 const APIKEY = process.env.EXPO_PUBLIC_NEWS_API_KEY;
-const BASE = 'https://newsapi.org/v2';
+const BASE = process.env.EXPO_PUBLIC_BASE_URL;
 
 async function request(endpoint: string, params: Record<string, string>): Promise<Article[]> {
   if (!APIKEY) {
