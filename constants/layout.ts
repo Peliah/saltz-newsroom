@@ -1,3 +1,18 @@
-export const AUTH_HEADER_INNER_HEIGHT = 52;
+/** Single-row height (mobile header, or desktop header single row). */
+export const APP_HEADER_INNER_HEIGHT = 56;
+
+/** Stacked desktop header: brand row + horizontal nav row when width is tablet–desktop but < APP_HEADER_BREAKPOINT. */
+export const APP_HEADER_INNER_HEIGHT_COMPACT = 92;
+
+/**
+ * At or above this width, show `DesktopAppHeader`. Below, show `MobileAppHeader` (bottom tabs only for nav).
+ */
+export const HEADER_TABLET_MIN = 768;
+
+/** Below this width, `DesktopAppHeader` uses the compact two-row layout (only when width >= HEADER_TABLET_MIN). */
+export const APP_HEADER_BREAKPOINT = 900;
+
+/** @deprecated Use APP_HEADER_INNER_HEIGHT */
+export const AUTH_HEADER_INNER_HEIGHT = APP_HEADER_INNER_HEIGHT;
 
 export const AUTH_SCREEN_CONTENT_EXTRA_TOP = 20;

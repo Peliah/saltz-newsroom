@@ -70,6 +70,7 @@ export const Check = createLucideMac('check', 'Check');
 export const ChevronDown = createLucideMac('expand-more', 'ChevronDown');
 export const ChevronUp = createLucideMac('expand-less', 'ChevronUp');
 export const Clock3 = createLucideMac('schedule', 'Clock3');
+export const LogIn = createLucideMac('login', 'LogIn');
 export const LogOut = createLucideMac('logout', 'LogOut');
 export const MapPin = createLucideMac('place', 'MapPin');
 export const MessageCircle = createLucideMac('chat-bubble-outline', 'MessageCircle');
