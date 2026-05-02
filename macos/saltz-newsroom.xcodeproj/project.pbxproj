@@ -10,6 +10,7 @@
 		0913A3B4F3595545840B473F /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D054AFD015046AEC710D9FC9 /* ExpoModulesProvider.swift */; };
 		4AAB396D39345F05D5353964 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 455FEA4D1A39D88F9A9D7667 /* PrivacyInfo.xcprivacy */; };
 		5142014D2437B4B30078DB4F /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5142014C2437B4B30078DB4F /* AppDelegate.mm */; };
+		B8F3E2D124374B4B0078DB4F /* SaltzAppDependencyProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = B8F3E2D024374B4B0078DB4F /* SaltzAppDependencyProvider.mm */; };
 		514201522437B4B40078DB4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 514201512437B4B40078DB4F /* Assets.xcassets */; };
 		514201552437B4B40078DB4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 514201532437B4B40078DB4F /* Main.storyboard */; };
 		514201582437B4B40078DB4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 514201572437B4B40078DB4F /* main.m */; };
@@ -26,6 +27,8 @@
 		514201492437B4B30078DB4F /* saltz-newsroom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "saltz-newsroom.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5142014B2437B4B30078DB4F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5142014C2437B4B30078DB4F /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		B8F3E2CF24374B4B0078DB4F /* SaltzAppDependencyProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SaltzAppDependencyProvider.h; sourceTree = "<group>"; };
+		B8F3E2D024374B4B0078DB4F /* SaltzAppDependencyProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SaltzAppDependencyProvider.mm; sourceTree = "<group>"; };
 		514201512437B4B40078DB4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		514201542437B4B40078DB4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		514201562437B4B40078DB4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -76,6 +79,8 @@
 			children = (
 				5142014B2437B4B30078DB4F /* AppDelegate.h */,
 				5142014C2437B4B30078DB4F /* AppDelegate.mm */,
+				B8F3E2CF24374B4B0078DB4F /* SaltzAppDependencyProvider.h */,
+				B8F3E2D024374B4B0078DB4F /* SaltzAppDependencyProvider.mm */,
 				514201512437B4B40078DB4F /* Assets.xcassets */,
 				514201532437B4B40078DB4F /* Main.storyboard */,
 				514201562437B4B40078DB4F /* Info.plist */,
@@ -381,6 +386,7 @@
 			files = (
 				514201582437B4B40078DB4F /* main.m in Sources */,
 				5142014D2437B4B30078DB4F /* AppDelegate.mm in Sources */,
+				B8F3E2D124374B4B0078DB4F /* SaltzAppDependencyProvider.mm in Sources */,
 				0913A3B4F3595545840B473F /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

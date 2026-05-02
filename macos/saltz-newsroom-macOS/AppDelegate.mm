@@ -1,7 +1,7 @@
 #import "AppDelegate.h"
 
+#import "SaltzAppDependencyProvider.h"
 #import <React/RCTBundleURLProvider.h>
-#import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
 
 @implementation AppDelegate
 
@@ -11,7 +11,7 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
-  self.dependencyProvider = [RCTAppDependencyProvider new];
+  self.dependencyProvider = [SaltzAppDependencyProvider new];
   
   return [super applicationDidFinishLaunching:notification];
 }
@@ -24,8 +24,21 @@
 - (NSURL *)bundleURL
 {
 #if DEBUG
-  // return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@".expo/.virtual-metro-entry"];
+  // RN sets RCTPlatformName to "ios" on macOS, so Metro would get platform=ios and skip macOS shims.
+  // Request platform=macos so Metro resolves react-native-macos, expo shims, and reanimated stub.
+  NSURL *url =
+      [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@".expo/.virtual-metro-entry"];
+  NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+  NSMutableArray<NSURLQueryItem *> *items = [NSMutableArray array];
+  for (NSURLQueryItem *item in components.queryItems) {
+    if ([item.name isEqualToString:@"platform"] && [item.value isEqualToString:@"ios"]) {
+      [items addObject:[NSURLQueryItem queryItemWithName:@"platform" value:@"macos"]];
+    } else {
+      [items addObject:item];
+    }
+  }
+  components.queryItems = items;
+  return components.URL ?: url;
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
