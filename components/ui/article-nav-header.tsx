@@ -4,9 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppChromeHeader } from '@/components/ui/app-headers';
 import { articleStyles } from '@/stylesheet/article.styles';
 
-/**
- * Article modal/screen: same `AppChromeHeader` as tabs, in-flow (not the absolute `AuthHeader` shell).
- */
+
 export function ArticleNavHeader() {
   const insets = useSafeAreaInsets();
 

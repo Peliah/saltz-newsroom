@@ -3,6 +3,8 @@ import { WifiOff } from 'lucide-react-native';
 import { useSyncExternalStore } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { df } from '@/constants/typography';
+
 export function OfflineBanner() {
   const online = useSyncExternalStore(
     onlineManager.subscribe,
@@ -39,8 +41,8 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    fontSize: 12,
-    lineHeight: 17,
+    fontSize: df(12),
+    lineHeight: df(17),
     fontFamily: 'InterRegular',
     color: '#C5C8CE',
   },

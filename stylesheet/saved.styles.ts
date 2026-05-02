@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { df } from '@/constants/typography';
 
 export const savedStyles = StyleSheet.create({
   body: {
@@ -18,23 +19,23 @@ export const savedStyles = StyleSheet.create({
     gap: 8,
   },
   kicker: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(10),
+    lineHeight: df(15),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     color: '#EE343B',
     fontFamily: 'JetBrainsMono',
   },
   title: {
-    fontSize: 24,
-    lineHeight: 26,
+    fontSize: df(24),
+    lineHeight: df(26),
     letterSpacing: -0.36,
     color: '#F0F2F5',
     fontFamily: 'GeorgiaBold',
   },
   subTitle: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(12),
+    lineHeight: df(16),
     color: '#9498A2',
     fontFamily: 'InterRegular',
   },
@@ -42,8 +43,8 @@ export const savedStyles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   clearActionText: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(10),
+    lineHeight: df(15),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     color: '#9498A2',

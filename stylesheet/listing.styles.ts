@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { df } from '@/constants/typography';
 
 export const listingStyles = StyleSheet.create({
   container: {
@@ -14,17 +15,17 @@ export const listingStyles = StyleSheet.create({
     backgroundColor: '#f2f4f7',
   },
   title: {
-    fontSize: 32,
+    fontSize: df(32),
     color: '#111827',
     fontFamily: 'GeorgiaBold',
   },
   subtitle: {
-    fontSize: 20,
+    fontSize: df(20),
     color: '#111827',
     fontFamily: 'InterBold',
   },
   body: {
-    fontSize: 16,
+    fontSize: df(16),
     color: '#374151',
     fontFamily: 'InterRegular',
   },

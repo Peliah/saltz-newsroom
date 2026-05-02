@@ -17,6 +17,7 @@ import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
 import { LoadingBlock } from '@/components/ui/loading-block';
 import { OfflineBanner } from '@/components/ui/offline-banner';
+import { PageMaxWidth } from '@/components/ui/page-max-width';
 import { StateMessage } from '@/components/ui/state-message';
 import { usePreferences } from '@/context/preferences-context';
 import { useSavedArticles } from '@/context/saved-articles-context';
@@ -25,6 +26,7 @@ import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { fetchFeed } from '@/libs/news/client';
 import { feedKey } from '@/libs/news/query-keys';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
+import { pageWidthStyles } from '@/stylesheet/page.styles';
 import type { FeedNavDirection, FeedNavState } from '@/types/feed';
 
 export default function HomeScreen() {
@@ -100,8 +102,8 @@ export default function HomeScreen() {
     <View style={styles.screen}>
       <AuthHeader />
       <ScrollView
-        style={[styles.content, { paddingTop: headerOffset }]}
-        contentContainerStyle={styles.scrollContent}
+        style={[styles.content, { paddingTop: Platform.OS === 'web' ? 20 : headerOffset }]}
+        contentContainerStyle={[styles.scrollContent, pageWidthStyles.scrollContentCentered]}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -111,6 +113,7 @@ export default function HomeScreen() {
             colors={Platform.OS === 'android' ? ['#EE343B'] : undefined}
           />
         }>
+        <PageMaxWidth>
         <OfflineBanner />
         <CategoryTabs
           categories={visibleCategories}
@@ -159,6 +162,7 @@ export default function HomeScreen() {
         </View>
 
         <AuthFooter />
+        </PageMaxWidth>
       </ScrollView>
     </View>
   );

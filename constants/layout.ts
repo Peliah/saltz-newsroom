@@ -12,6 +12,9 @@ export const HEADER_TABLET_MIN = 768;
 /** Below this width, `AppChromeHeader` uses the compact two-row desktop layout (only when width >= HEADER_TABLET_MIN). */
 export const APP_HEADER_BREAKPOINT = 900;
 
+/** Max width for main page content and chrome (`AppChromeHeader`) on large viewports. */
+export const PAGE_MAX_WIDTH = 1240;
+
 /** @deprecated Use APP_HEADER_INNER_HEIGHT */
 export const AUTH_HEADER_INNER_HEIGHT = APP_HEADER_INNER_HEIGHT;
 

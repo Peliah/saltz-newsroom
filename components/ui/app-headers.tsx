@@ -1,21 +1,22 @@
 import { Link, router, useSegments } from 'expo-router';
 import {
-  Bell,
-  Bookmark,
-  CalendarDays,
-  LogIn,
-  Newspaper,
-  Search,
-  Sparkles,
+    Bell,
+    Bookmark,
+    CalendarDays,
+    LogIn,
+    Newspaper,
+    Search,
+    Sparkles,
 } from 'lucide-react-native';
 import { useEffect, useMemo, useState, type ComponentType } from 'react';
 import {
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-  type StyleProp,
-  type ViewStyle,
+    Platform,
+    Pressable,
+    ScrollView,
+    Text,
+    View,
+    type StyleProp,
+    type ViewStyle,
 } from 'react-native';
 
 import { APP_HEADER_BREAKPOINT, HEADER_TABLET_MIN } from '@/constants/layout';
@@ -154,12 +155,15 @@ function HeaderToolbar({
       <Pressable accessibilityRole="button" accessibilityLabel="Notifications">
         <Bell color={SUBTLE} size={ICON_ACTION} strokeWidth={ICON_NAV_STROKE} />
       </Pressable>
+
+      {Platform.OS === 'web' && (
       <Link href={routes.auth.signIn} asChild>
         <Pressable style={styles.outlineHeaderButton} accessibilityLabel="Sign in">
           <LogIn color="#9498A2" size={14} strokeWidth={ICON_NAV_STROKE} />
           <Text style={styles.outlineHeaderButtonText}>SIGN IN</Text>
         </Pressable>
       </Link>
+      )}
       <LiveClock visible={!!showLiveClock} />
     </View>
   );

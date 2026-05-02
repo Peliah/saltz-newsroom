@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { df } from '@/constants/typography';
 
 export const personalizeStyles = StyleSheet.create({
   overlay: {
@@ -36,23 +37,23 @@ export const personalizeStyles = StyleSheet.create({
     gap: 6,
   },
   headerLabel: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(10),
+    lineHeight: df(15),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
     color: '#EE343B',
   },
   title: {
-    fontSize: 20,
-    lineHeight: 22,
+    fontSize: df(20),
+    lineHeight: df(22),
     letterSpacing: -0.3,
     fontFamily: 'GeorgiaBold',
     color: '#F0F2F5',
   },
   subtitle: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(12),
+    lineHeight: df(16),
     fontFamily: 'InterRegular',
     color: '#9498A2',
   },
@@ -80,8 +81,8 @@ export const personalizeStyles = StyleSheet.create({
     gap: 6,
   },
   sectionHeading: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(10),
+    lineHeight: df(15),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
@@ -105,8 +106,8 @@ export const personalizeStyles = StyleSheet.create({
     backgroundColor: 'rgba(238, 52, 59, 0.08)',
   },
   chipCatText: {
-    fontSize: 11,
-    lineHeight: 16,
+    fontSize: df(11),
+    lineHeight: df(16),
     letterSpacing: 0.55,
     textTransform: 'uppercase',
     fontFamily: 'InterRegular',
@@ -127,8 +128,8 @@ export const personalizeStyles = StyleSheet.create({
     backgroundColor: 'rgba(238, 52, 59, 0.08)',
   },
   chipTopicText: {
-    fontSize: 11,
-    lineHeight: 16,
+    fontSize: df(11),
+    lineHeight: df(16),
     fontFamily: 'InterRegular',
     color: '#9498A2',
   },
@@ -149,7 +150,7 @@ export const personalizeStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#27292D',
     backgroundColor: '#0C0D0F',
-    fontSize: 14,
+    fontSize: df(14),
     fontFamily: 'InterRegular',
     color: '#F0F2F5',
   },
@@ -176,7 +177,7 @@ export const personalizeStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   geoSelectText: {
-    fontSize: 14,
+    fontSize: df(14),
     fontFamily: 'InterRegular',
     color: '#F0F2F5',
   },
@@ -187,7 +188,7 @@ export const personalizeStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#27292D',
     backgroundColor: '#0C0D0F',
-    fontSize: 14,
+    fontSize: df(14),
     fontFamily: 'InterRegular',
     color: '#F0F2F5',
   },
@@ -205,13 +206,13 @@ export const personalizeStyles = StyleSheet.create({
     borderBottomColor: '#27292D',
   },
   countryMenuItemText: {
-    fontSize: 14,
+    fontSize: df(14),
     color: '#F0F2F5',
     fontFamily: 'InterRegular',
   },
   previewMuted: {
     color: '#9498A2',
-    fontSize: 12,
+    fontSize: df(12),
     fontFamily: 'InterRegular',
   },
   previewBody: {
@@ -240,15 +241,15 @@ export const personalizeStyles = StyleSheet.create({
     gap: 6,
   },
   previewHeaderTitle: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(10),
+    lineHeight: df(15),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
     color: '#F0F2F5',
   },
   previewHeaderMeta: {
-    fontSize: 10,
+    fontSize: df(10),
     fontFamily: 'JetBrainsMono',
     color: '#9498A2',
     textTransform: 'uppercase',
@@ -265,7 +266,7 @@ export const personalizeStyles = StyleSheet.create({
     borderBottomColor: '#27292D',
   },
   previewHintAccent: {
-    fontSize: 10,
+    fontSize: df(10),
     fontFamily: 'JetBrainsMono',
     color: '#EE343B',
     textTransform: 'uppercase',
@@ -273,8 +274,8 @@ export const personalizeStyles = StyleSheet.create({
   },
   previewHint: {
     flex: 1,
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(10),
+    lineHeight: df(15),
     fontFamily: 'InterRegular',
     color: 'rgba(148, 152, 162, 0.85)',
   },
@@ -300,8 +301,8 @@ export const personalizeStyles = StyleSheet.create({
   },
   previewTitle: {
     flex: 1,
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(12),
+    lineHeight: df(16),
     fontFamily: 'InterBold',
     color: '#F0F2F5',
   },
@@ -312,8 +313,8 @@ export const personalizeStyles = StyleSheet.create({
     marginTop: 4,
   },
   previewSource: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(10),
+    lineHeight: df(15),
     fontFamily: 'InterRegular',
     color: '#9498A2',
   },
@@ -329,8 +330,8 @@ export const personalizeStyles = StyleSheet.create({
     gap: 12,
   },
   skipText: {
-    fontSize: 11,
-    lineHeight: 16,
+    fontSize: df(11),
+    lineHeight: df(16),
     letterSpacing: 0.22,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
@@ -349,8 +350,8 @@ export const personalizeStyles = StyleSheet.create({
     borderRadius: 4,
   },
   saveBtnText: {
-    fontSize: 11,
-    lineHeight: 16,
+    fontSize: df(11),
+    lineHeight: df(16),
     letterSpacing: 0.22,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',

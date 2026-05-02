@@ -1,7 +1,7 @@
 import {
-    createMaterialTopTabNavigator,
-    type MaterialTopTabNavigationEventMap,
-    type MaterialTopTabNavigationOptions,
+  createMaterialTopTabNavigator,
+  type MaterialTopTabNavigationEventMap,
+  type MaterialTopTabNavigationOptions,
 } from '@react-navigation/material-top-tabs';
 import type { ParamListBase, TabNavigationState } from '@react-navigation/native';
 import { Tabs, withLayoutContext } from 'expo-router';
@@ -9,6 +9,9 @@ import { Bookmark, CalendarDays, Newspaper, Search } from 'lucide-react-native';
 import React from 'react';
 import { Platform, Text, View } from 'react-native';
 
+import { HEADER_TABLET_MIN } from '@/constants/layout';
+import { df } from '@/constants/typography';
+import { useResponsiveWidth } from '@/context/responsive-layout-context';
 import { Fonts } from '@/constants/theme';
 
 const { Navigator } = createMaterialTopTabNavigator();
@@ -40,6 +43,26 @@ const TABS: TabConfig[] = [
 /** Matches `minWidth` on the custom `tabBarLabel` container so the icon centers over the label. */
 const TAB_ITEM_MIN_WIDTH = 88;
 
+const MAC_TAB_BAR_VISIBLE = {
+  backgroundColor: '#0C0D0F',
+  borderTopColor: '#27292D',
+  borderTopWidth: 1,
+  minHeight: 84,
+  paddingTop: 10,
+  paddingBottom: 10,
+} as const;
+
+const MAC_TAB_BAR_HIDDEN = {
+  height: 0,
+  minHeight: 0,
+  maxHeight: 0,
+  overflow: 'hidden' as const,
+  opacity: 0,
+  borderTopWidth: 0,
+  paddingTop: 0,
+  paddingBottom: 0,
+};
+
 function coerceTabColor(color: unknown): string {
   return typeof color === 'string' ? color : '#9498A2';
 }
@@ -67,14 +90,13 @@ function MacTabBarIcon({
   );
 }
 
-function TabLayoutMacOS() {
+function TabLayoutMacOS({ showBottomBar }: { showBottomBar: boolean }) {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: '#fcfcfc',
         tabBarInactiveTintColor: '#9498A2',
-        // Wide macOS windows default to icon beside label; use a column so icon sits above the label.
         tabBarLabelPosition: 'below-icon',
         tabBarItemStyle: {
           flexDirection: 'column',
@@ -84,14 +106,7 @@ function TabLayoutMacOS() {
         tabBarIconStyle: {
           marginBottom: 2,
         },
-        tabBarStyle: {
-          backgroundColor: '#0C0D0F',
-          borderTopColor: '#27292D',
-          borderTopWidth: 1,
-          minHeight: 84,
-          paddingTop: 10,
-          paddingBottom: 10,
-        },
+        tabBarStyle: showBottomBar ? MAC_TAB_BAR_VISIBLE : MAC_TAB_BAR_HIDDEN,
         tabBarLabel: ({ focused, color, children }) => (
           <View
             style={{
@@ -106,8 +121,8 @@ function TabLayoutMacOS() {
               style={{
                 color: coerceTabColor(color),
                 fontFamily: Fonts?.mono ?? 'JetBrainsMono',
-                fontSize: 12,
-                lineHeight: 16,
+                fontSize: df(12),
+                lineHeight: df(16),
                 textTransform: 'uppercase',
               }}>
               {children}
@@ -129,21 +144,18 @@ function TabLayoutMacOS() {
   );
 }
 
-export default function TabLayout() {
-  if (Platform.OS === 'macos') {
-    return <TabLayoutMacOS />;
-  }
-
+function TabLayoutMaterial({ showBottomBar }: { showBottomBar: boolean }) {
   return (
     <MaterialTopTabsLayout
+      tabBar={showBottomBar ? undefined : () => null}
       tabBarPosition="bottom"
       screenOptions={{
-        swipeEnabled: false,
+        swipeEnabled: showBottomBar,
         animationEnabled: true,
         tabBarShowIcon: true,
         tabBarActiveTintColor: '#fcfcfc',
         tabBarInactiveTintColor: '#9498A2',
-        tabBarStyle: { backgroundColor: '#0C0D0F', minHeight: 84 },
+        tabBarStyle: showBottomBar ? { backgroundColor: '#0C0D0F', minHeight: 84 } : { height: 0 },
         tabBarItemStyle: {
           flexDirection: 'column',
           alignItems: 'center',
@@ -166,8 +178,8 @@ export default function TabLayout() {
               style={{
                 color,
                 fontFamily: Fonts?.mono ?? 'JetBrainsMono',
-                fontSize: 12,
-                lineHeight: 16,
+                fontSize: df(12),
+                lineHeight: df(16),
                 textTransform: 'uppercase',
                 ...(Platform.OS === 'android' ? { includeFontPadding: false } : null),
               }}>
@@ -202,4 +214,15 @@ export default function TabLayout() {
       ))}
     </MaterialTopTabsLayout>
   );
+}
+
+export default function TabLayout() {
+  const width = useResponsiveWidth();
+  const showBottomBar = width < HEADER_TABLET_MIN;
+
+  if (Platform.OS === 'macos') {
+    return <TabLayoutMacOS showBottomBar={showBottomBar} />;
+  }
+
+  return <TabLayoutMaterial showBottomBar={showBottomBar} />;
 }

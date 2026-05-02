@@ -1,5 +1,8 @@
 import { StyleSheet } from 'react-native';
 
+import { PAGE_MAX_WIDTH } from '@/constants/layout';
+import { df } from '@/constants/typography';
+
 export const authStyles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -16,19 +19,19 @@ export const authStyles = StyleSheet.create({
     gap: 12,
   },
   heading: {
-    fontSize: 42,
+    fontSize: df(42),
     color: '#F0F2F5',
     fontFamily: 'GeorgiaBold',
   },
   title: {
-    fontSize: 24,
-    lineHeight: 26,
+    fontSize: df(24),
+    lineHeight: df(26),
     color: '#F0F2F5',
     fontFamily: 'GeorgiaBold',
   },
   body: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(12),
+    lineHeight: df(16),
     color: '#9498A2',
     fontFamily: 'InterRegular',
   },
@@ -50,8 +53,8 @@ export const authStyles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#EE343B',
-    fontSize: 12,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(15),
     fontFamily: 'InterRegular',
   },
   primaryButton: {
@@ -62,7 +65,7 @@ export const authStyles = StyleSheet.create({
   },
   primaryButtonText: {
     color: '#FCFCFC',
-    fontSize: 10,
+    fontSize: df(10),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
@@ -72,8 +75,8 @@ export const authStyles = StyleSheet.create({
     fontFamily: 'InterBold',
   },
   helper: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(12),
+    lineHeight: df(16),
     color: '#9498A2',
     fontFamily: 'InterRegular',
   },
@@ -84,8 +87,8 @@ export const authStyles = StyleSheet.create({
     marginBottom: 6,
   },
   forgotPasswordText: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(12),
+    lineHeight: df(16),
     color: '#9498A2',
     fontFamily: 'InterRegular',
     textAlign: 'right',
@@ -99,8 +102,8 @@ export const authStyles = StyleSheet.create({
     marginTop: 8,
   },
   signUpText: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(12),
+    lineHeight: df(16),
     color: '#9498A2',
     fontFamily: 'InterRegular',
   },
@@ -131,8 +134,8 @@ export const authStyles = StyleSheet.create({
     backgroundColor: 'rgba(238, 52, 59, 0.25)',
   },
   rememberText: {
-    fontSize: 12,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(15),
     color: '#F0F2F5',
     fontFamily: 'InterRegular',
   },
@@ -155,7 +158,7 @@ export const authStyles = StyleSheet.create({
   },
   headerMax: {
     width: '100%',
-    maxWidth: 1280,
+    maxWidth: PAGE_MAX_WIDTH,
     alignSelf: 'center',
   },
   headerRowDesktop: {
@@ -235,7 +238,7 @@ export const authStyles = StyleSheet.create({
   },
   navTabLabel: {
     color: '#9498A2',
-    fontSize: 11,
+    fontSize: df(11),
     letterSpacing: 0.55,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
@@ -254,7 +257,7 @@ export const authStyles = StyleSheet.create({
   },
   outlineHeaderButtonText: {
     color: '#F0F2F5',
-    fontSize: 10,
+    fontSize: df(10),
     letterSpacing: 0.4,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
@@ -272,14 +275,14 @@ export const authStyles = StyleSheet.create({
   },
   liveLabel: {
     color: '#9498A2',
-    fontSize: 10,
+    fontSize: df(10),
     letterSpacing: 0.5,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
   },
   clockText: {
     color: '#9498A2',
-    fontSize: 11,
+    fontSize: df(11),
     fontFamily: 'JetBrainsMono',
     fontVariant: ['tabular-nums'],
   },
@@ -302,8 +305,8 @@ export const authStyles = StyleSheet.create({
   },
   logoN: {
     color: '#FCFCFC',
-    fontSize: 15,
-    lineHeight: 17,
+    fontSize: df(15),
+    lineHeight: df(17),
     fontFamily: 'GeorgiaBold',
     textAlign: 'center',
     includeFontPadding: false,
@@ -313,15 +316,15 @@ export const authStyles = StyleSheet.create({
   },
   brandTitle: {
     color: '#F0F2F5',
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: df(14),
+    lineHeight: df(20),
     letterSpacing: -0.35,
     fontFamily: 'GeorgiaBold',
   },
   brandSub: {
     color: '#9498A2',
-    fontSize: 8,
-    lineHeight: 10,
+    fontSize: df(8),
+    lineHeight: df(10),
     textTransform: 'uppercase',
     letterSpacing: 0.16,
     fontFamily: 'JetBrainsMono',
@@ -361,7 +364,7 @@ export const authStyles = StyleSheet.create({
   },
   footerCopy: {
     color: '#9498A2',
-    fontSize: 12,
+    fontSize: df(12),
     textTransform: 'uppercase',
     letterSpacing: 0.24,
     fontFamily: 'JetBrainsMono',
@@ -376,14 +379,14 @@ export const authStyles = StyleSheet.create({
   },
   interestButtonText: {
     color: '#F0F2F5',
-    fontSize: 12,
+    fontSize: df(12),
     textTransform: 'uppercase',
     letterSpacing: 0.24,
     fontFamily: 'JetBrainsMono',
   },
   poweredBy: {
     color: '#9498A2',
-    fontSize: 12,
+    fontSize: df(12),
     textTransform: 'uppercase',
     letterSpacing: 0.24,
     fontFamily: 'JetBrainsMono',

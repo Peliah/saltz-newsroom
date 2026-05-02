@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { df } from '@/constants/typography';
 
 export const feedsStyles = StyleSheet.create({
   screen: {
@@ -27,8 +28,8 @@ export const feedsStyles = StyleSheet.create({
     marginRight: 2,
   },
   categoryLabel: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(18),
     letterSpacing: 0.5,
     textTransform: 'uppercase',
     fontFamily: 'InterRegular',
@@ -55,8 +56,8 @@ export const feedsStyles = StyleSheet.create({
     borderBottomColor: '#27292D',
   },
   sectionText: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(18),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
@@ -64,8 +65,8 @@ export const feedsStyles = StyleSheet.create({
   },
   headingText: {
     marginTop: 4,
-    fontSize: 24,
-    lineHeight: 26,
+    fontSize: df(28),
+    lineHeight: df(34),
     letterSpacing: -0.36,
     fontFamily: 'GeorgiaBold',
     color: '#F0F2F5',
@@ -103,15 +104,15 @@ export const feedsStyles = StyleSheet.create({
     paddingVertical: 2,
   },
   badgeTextPrimary: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(18),
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
     color: '#FCFCFC',
   },
   badgeTextSecondary: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(18),
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
     color: '#F0F2F5',
@@ -130,15 +131,15 @@ export const feedsStyles = StyleSheet.create({
     gap: 6,
   },
   featuredTitle: {
-    fontSize: 24,
-    lineHeight: 26,
+    fontSize: df(28),
+    lineHeight: df(34),
     letterSpacing: -0.24,
     fontFamily: 'GeorgiaBold',
     color: '#F0F2F5',
   },
   featuredDescription: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(14),
+    lineHeight: df(20),
     fontFamily: 'InterRegular',
     color: '#9498A2',
   },
@@ -150,8 +151,8 @@ export const feedsStyles = StyleSheet.create({
     minWidth: 0,
   },
   metaText: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(18),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
@@ -205,8 +206,8 @@ export const feedsStyles = StyleSheet.create({
     minWidth: 0,
   },
   sourceText: {
-    fontSize: 9,
-    lineHeight: 14,
+    fontSize: df(11),
+    lineHeight: df(17),
     letterSpacing: 0.18,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
@@ -215,8 +216,8 @@ export const feedsStyles = StyleSheet.create({
     flexGrow: 1,
   },
   dotText: {
-    fontSize: 9,
-    lineHeight: 14,
+    fontSize: df(11),
+    lineHeight: df(17),
     color: '#9498A2',
     fontFamily: 'JetBrainsMono',
     flexShrink: 0,
@@ -228,15 +229,15 @@ export const feedsStyles = StyleSheet.create({
     gap: 4,
   },
   gridTitle: {
-    fontSize: 16,
-    lineHeight: 18,
+    fontSize: df(18),
+    lineHeight: df(22),
     letterSpacing: -0.24,
     color: '#F0F2F5',
     fontFamily: 'GeorgiaBold',
   },
   gridDescription: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(14),
+    lineHeight: df(20),
     color: '#9498A2',
     fontFamily: 'InterRegular',
   },
@@ -257,14 +258,14 @@ export const feedsStyles = StyleSheet.create({
     backgroundColor: '#1E1F23',
   },
   emptyStateTitle: {
-    fontSize: 16,
-    lineHeight: 20,
+    fontSize: df(18),
+    lineHeight: df(24),
     color: '#F0F2F5',
     fontFamily: 'GeorgiaBold',
   },
   emptyStateDescription: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(14),
+    lineHeight: df(20),
     color: '#9498A2',
     fontFamily: 'InterRegular',
     textAlign: 'center',
