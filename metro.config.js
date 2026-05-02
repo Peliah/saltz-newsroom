@@ -4,6 +4,12 @@ const { getDefaultConfig } = require('expo/metro-config');
 
 const config = getDefaultConfig(__dirname);
 
+// `expo-sqlite` web worker imports `*.wasm`; Metro must treat WASM as a bundled asset.
+const { assetExts } = config.resolver;
+if (!assetExts.includes('wasm')) {
+  assetExts.push('wasm');
+}
+
 // Expo defaults to platforms: ['ios', 'android']. macOS must be listed or Metro + our shims mis-resolve.
 const platforms = config.resolver.platforms ?? ['ios', 'android'];
 if (!platforms.includes('macos')) {
