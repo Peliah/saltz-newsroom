@@ -11,7 +11,7 @@ import { useResponsiveWidth } from '@/context/responsive-layout-context';
 
 /**
  * Padding below the status bar so scroll/content clears the absolute `AuthHeader` (main app / tabs).
- * Height matches `MobileAppHeader` (narrow) or `DesktopAppHeader` (compact vs single row by width).
+ * Height matches `AppChromeHeader`: single row on narrow width, compact vs single-row desktop by breakpoint.
  */
 export function useAuthHeaderOffset() {
   const insets = useSafeAreaInsets();

@@ -2,9 +2,7 @@ import { Link } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { HEADER_TABLET_MIN } from '@/constants/layout';
-import { useResponsiveWidth } from '@/context/responsive-layout-context';
-import { DesktopAppHeader, MobileAppHeader } from '@/components/ui/app-headers';
+import { AppChromeHeader } from '@/components/ui/app-headers';
 import { routes } from '@/libs/routes';
 import { authStyles as styles } from '@/stylesheet/auth.styles';
 
@@ -15,8 +13,6 @@ type AuthHeaderProps = {
 
 export function AuthHeader({ variant = 'app' }: AuthHeaderProps) {
   const insets = useSafeAreaInsets();
-  const width = useResponsiveWidth();
-  const useDesktopAppHeader = width >= HEADER_TABLET_MIN;
 
   if (variant === 'auth') {
     return (
@@ -61,7 +57,7 @@ export function AuthHeader({ variant = 'app' }: AuthHeaderProps) {
           paddingRight: Math.max(12, insets.right),
         },
       ]}>
-      {useDesktopAppHeader ? <DesktopAppHeader /> : <MobileAppHeader />}
+      <AppChromeHeader />
     </View>
   );
 }

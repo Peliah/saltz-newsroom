@@ -1,6 +1,4 @@
-/**
- * Desktop vs mobile app headers (`DesktopAppHeader`, `MobileAppHeader`).
- */
+import { Link, router, useSegments } from 'expo-router';
 import {
   Bell,
   Bookmark,
@@ -10,11 +8,17 @@ import {
   Search,
   Sparkles,
 } from 'lucide-react-native';
-import { Link, router, useSegments } from 'expo-router';
 import { useEffect, useMemo, useState, type ComponentType } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 
-import { APP_HEADER_BREAKPOINT } from '@/constants/layout';
+import { APP_HEADER_BREAKPOINT, HEADER_TABLET_MIN } from '@/constants/layout';
 import { useResponsiveWidth } from '@/context/responsive-layout-context';
 import { routes } from '@/libs/routes';
 import { authStyles as styles } from '@/stylesheet/auth.styles';
@@ -113,62 +117,57 @@ function HeaderNavLink({
   );
 }
 
-/**
- * Mobile app header: one row, no top tab nav (use bottom tabs) and no live clock.
- * Shown when `width < HEADER_TABLET_MIN`.
- */
-export function MobileAppHeader() {
-  const { openPersonalize } = usePreferences();
-
+function BrandMark({ brandRowStyle }: { brandRowStyle?: StyleProp<ViewStyle> }) {
   return (
-    <View style={styles.headerMax}>
-      <View style={styles.mobileHeaderRow}>
-        <View style={[styles.brandRow, styles.mobileHeaderBrand]}>
-          <View style={styles.logoBox}>
-            <Text style={styles.logoN} accessibilityLabel="Newsroom">
-              N
-            </Text>
-          </View>
-          <View style={styles.brandTextWrap}>
-            <Text style={styles.brandTitle}>NEWSROOM</Text>
-            <Text style={styles.brandSub}>LIVE WIRE</Text>
-          </View>
-        </View>
-        <View style={styles.headerActionsEndMobile}>
-          <Pressable
-            onPress={openPersonalize}
-            style={styles.outlineHeaderButton}
-            accessibilityLabel="Interests">
-            <Sparkles color="#F0F2F5" size={14} />
-            <Text style={styles.outlineHeaderButtonText}>INTERESTS</Text>
-          </Pressable>
-          <Pressable accessibilityRole="button" accessibilityLabel="Notifications">
-            <Bell color={SUBTLE} size={ICON_ACTION} strokeWidth={ICON_NAV_STROKE} />
-          </Pressable>
-          <Link href={routes.auth.signIn} asChild>
-            <Pressable style={styles.outlineHeaderButton} accessibilityLabel="Sign in">
-              <LogIn color="#9498A2" size={14} strokeWidth={ICON_NAV_STROKE} />
-              <Text style={styles.outlineHeaderButtonText}>SIGN IN</Text>
-            </Pressable>
-          </Link>
-        </View>
+    <View style={[styles.brandRow, brandRowStyle]}>
+      <View style={styles.logoBox}>
+        <Text style={styles.logoN} accessibilityLabel="Newsroom">
+          N
+        </Text>
+      </View>
+      <View style={styles.brandTextWrap}>
+        <Text style={styles.brandTitle}>NEWSROOM</Text>
+        <Text style={styles.brandSub}>LIVE WIRE</Text>
       </View>
     </View>
   );
 }
 
-/**
- * Desktop app header: brand, top tab nav (icon + label), interests / bell / sign-in, live clock when wide.
- * At tablet widths below `APP_HEADER_BREAKPOINT`, uses a second row + horizontal scroll for tabs.
- * Only mounted when `width >= HEADER_TABLET_MIN` (see `AuthHeader`).
- */
-export function DesktopAppHeader() {
-  const width = useResponsiveWidth();
-  const isWideLayout = width >= APP_HEADER_BREAKPOINT;
+function HeaderToolbar({
+  containerStyle,
+  showLiveClock,
+}: {
+  containerStyle: StyleProp<ViewStyle>;
+  showLiveClock?: boolean;
+}) {
   const { openPersonalize } = usePreferences();
-  const activeTab = useHeaderActiveTabKey();
 
-  const nav = useMemo(
+  return (
+    <View style={containerStyle}>
+      <Pressable
+        onPress={openPersonalize}
+        style={styles.outlineHeaderButton}
+        accessibilityLabel="Interests">
+        <Sparkles color="#F0F2F5" size={14} />
+        <Text style={styles.outlineHeaderButtonText}>INTERESTS</Text>
+      </Pressable>
+      <Pressable accessibilityRole="button" accessibilityLabel="Notifications">
+        <Bell color={SUBTLE} size={ICON_ACTION} strokeWidth={ICON_NAV_STROKE} />
+      </Pressable>
+      <Link href={routes.auth.signIn} asChild>
+        <Pressable style={styles.outlineHeaderButton} accessibilityLabel="Sign in">
+          <LogIn color="#9498A2" size={14} strokeWidth={ICON_NAV_STROKE} />
+          <Text style={styles.outlineHeaderButtonText}>SIGN IN</Text>
+        </Pressable>
+      </Link>
+      <LiveClock visible={!!showLiveClock} />
+    </View>
+  );
+}
+
+function useTabNav() {
+  const activeTab = useHeaderActiveTabKey();
+  return useMemo(
     () =>
       HEADER_TAB_ITEMS.map((t) => (
         <HeaderNavLink
@@ -181,87 +180,56 @@ export function DesktopAppHeader() {
       )),
     [activeTab]
   );
+}
+
+/**
+ * Single app header: picks mobile vs desktop layout from width (`HEADER_TABLET_MIN`, `APP_HEADER_BREAKPOINT`).
+ */
+export function AppChromeHeader() {
+  const width = useResponsiveWidth();
+  const nav = useTabNav();
+
+  const isTabletUp = width >= HEADER_TABLET_MIN;
+  const isWideDesktopRow = width >= APP_HEADER_BREAKPOINT;
+
+  if (!isTabletUp) {
+    return (
+      <View style={styles.headerMax}>
+        <View style={styles.mobileHeaderRow}>
+          <BrandMark brandRowStyle={styles.mobileHeaderBrand} />
+          <HeaderToolbar containerStyle={styles.headerActionsEndMobile} />
+        </View>
+      </View>
+    );
+  }
+
+  if (isWideDesktopRow) {
+    return (
+      <View style={styles.headerMax}>
+        <View style={styles.headerRowDesktop}>
+          <BrandMark />
+          <View style={styles.headerNavCenter}>{nav}</View>
+          <HeaderToolbar containerStyle={styles.headerActionsEnd} showLiveClock />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.headerMax}>
-      {isWideLayout ? (
-        <View style={styles.headerRowDesktop}>
-          <View style={styles.brandRow}>
-            <View style={styles.logoBox}>
-              <Text style={styles.logoN} accessibilityLabel="Newsroom">
-                N
-              </Text>
-            </View>
-            <View style={styles.brandTextWrap}>
-              <Text style={styles.brandTitle}>NEWSROOM</Text>
-              <Text style={styles.brandSub}>LIVE WIRE</Text>
-            </View>
-          </View>
-
-          <View style={styles.headerNavCenter}>{nav}</View>
-
-          <View style={styles.headerActionsEnd}>
-            <Pressable
-              onPress={openPersonalize}
-              style={styles.outlineHeaderButton}
-              accessibilityLabel="Interests">
-              <Sparkles color="#F0F2F5" size={14} />
-              <Text style={styles.outlineHeaderButtonText}>INTERESTS</Text>
-            </Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel="Notifications">
-              <Bell color={SUBTLE} size={ICON_ACTION} strokeWidth={ICON_NAV_STROKE} />
-            </Pressable>
-            <Link href={routes.auth.signIn} asChild>
-              <Pressable style={styles.outlineHeaderButton} accessibilityLabel="Sign in">
-                <LogIn color="#9498A2" size={14} strokeWidth={ICON_NAV_STROKE} />
-                <Text style={styles.outlineHeaderButtonText}>SIGN IN</Text>
-              </Pressable>
-            </Link>
-            <LiveClock visible />
-          </View>
+      <View style={styles.headerRowCompact}>
+        <View style={[styles.headerInner, { width: '100%' }]}>
+          <BrandMark />
+          <HeaderToolbar containerStyle={styles.headerActionsCompact} />
         </View>
-      ) : (
-        <View style={styles.headerRowCompact}>
-          <View style={[styles.headerInner, { width: '100%' }]}>
-            <View style={styles.brandRow}>
-              <View style={styles.logoBox}>
-                <Text style={styles.logoN} accessibilityLabel="Newsroom">
-                  N
-                </Text>
-              </View>
-              <View style={styles.brandTextWrap}>
-                <Text style={styles.brandTitle}>NEWSROOM</Text>
-                <Text style={styles.brandSub}>LIVE WIRE</Text>
-              </View>
-            </View>
-            <View style={styles.headerActionsCompact}>
-              <Pressable
-                onPress={openPersonalize}
-                style={styles.outlineHeaderButton}
-                accessibilityLabel="Interests">
-                <Sparkles color="#F0F2F5" size={14} />
-                <Text style={styles.outlineHeaderButtonText}>INTERESTS</Text>
-              </Pressable>
-              <Pressable accessibilityRole="button" accessibilityLabel="Notifications">
-                <Bell color={SUBTLE} size={ICON_ACTION} strokeWidth={ICON_NAV_STROKE} />
-              </Pressable>
-              <Link href={routes.auth.signIn} asChild>
-                <Pressable style={styles.outlineHeaderButton} accessibilityLabel="Sign in">
-                  <LogIn color="#9498A2" size={14} strokeWidth={ICON_NAV_STROKE} />
-                  <Text style={styles.outlineHeaderButtonText}>SIGN IN</Text>
-                </Pressable>
-              </Link>
-            </View>
-          </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.headerNavScrollInner}
-            style={{ maxHeight: 44 }}>
-            {nav}
-          </ScrollView>
-        </View>
-      )}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.headerNavScrollInner}
+          style={{ maxHeight: 44 }}>
+          {nav}
+        </ScrollView>
+      </View>
     </View>
   );
 }

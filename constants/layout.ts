@@ -5,11 +5,11 @@ export const APP_HEADER_INNER_HEIGHT = 56;
 export const APP_HEADER_INNER_HEIGHT_COMPACT = 92;
 
 /**
- * At or above this width, show `DesktopAppHeader`. Below, show `MobileAppHeader` (bottom tabs only for nav).
+ * At or above this width, `AppChromeHeader` shows desktop chrome (top tab strip). Below: mobile row only.
  */
 export const HEADER_TABLET_MIN = 768;
 
-/** Below this width, `DesktopAppHeader` uses the compact two-row layout (only when width >= HEADER_TABLET_MIN). */
+/** Below this width, `AppChromeHeader` uses the compact two-row desktop layout (only when width >= HEADER_TABLET_MIN). */
 export const APP_HEADER_BREAKPOINT = 900;
 
 /** @deprecated Use APP_HEADER_INNER_HEIGHT */
