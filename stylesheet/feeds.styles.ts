@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
 import { df } from '@/constants/typography';
+import { Platform, StyleSheet } from 'react-native';
 
 export const feedsStyles = StyleSheet.create({
   screen: {
@@ -79,8 +79,9 @@ export const feedsStyles = StyleSheet.create({
     marginBottom: 12,
   },
   featuredImage: {
-    height: 232,
+    height: Platform.OS === 'web' || Platform.OS === 'macos' ? 'auto' : 232,
     width: '100%',
+    aspectRatio: 16 / 10,
   },
   imageOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -166,7 +167,7 @@ export const feedsStyles = StyleSheet.create({
     gap: 14,
   },
   gridCard: {
-    width: '48%',
+    width: Platform.OS === 'web' || Platform.OS === 'macos' ? '32.5%' : '48%',
     borderWidth: 1,
     borderColor: '#27292D',
     backgroundColor: '#131417',

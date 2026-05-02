@@ -113,8 +113,8 @@ export default function HomeScreen() {
             colors={Platform.OS === 'android' ? ['#EE343B'] : undefined}
           />
         }>
-        <PageMaxWidth>
         <OfflineBanner />
+        <PageMaxWidth>
         <CategoryTabs
           categories={visibleCategories}
           activeCategory={activeCategory}
