@@ -35,6 +35,14 @@ export const Fonts = Platform.select({
     rounded: 'InterRegular',
     mono: 'JetBrainsMono',
   },
+  macos: {
+    sans: 'InterRegular',
+    sansBold: 'InterBold',
+    serif: 'GeorgiaRegular',
+    serifBold: 'GeorgiaBold',
+    rounded: 'InterRegular',
+    mono: 'JetBrainsMono',
+  },
   default: {
     sans: 'InterRegular',
     sansBold: 'InterBold',

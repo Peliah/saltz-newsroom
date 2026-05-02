@@ -20,6 +20,8 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
+    // Icon font for Android / web `IconSymbol` (Material). macOS uses Lucide shim via Metro instead.
+    material: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialIcons.ttf'),
     InterRegular: require('@/assets/fonts/inter/InterRegular.ttf'),
     InterBold: require('@/assets/fonts/inter/InterBold.ttf'),
     GeorgiaRegular: require('@/assets/fonts/georgia/georgiaRegular.ttf'),
