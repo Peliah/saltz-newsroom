@@ -1,0 +1,5 @@
+ extern const unsigned char saltz_newsroomVersionString[];
+ extern const double saltz_newsroomVersionNumber;
+
+ const unsigned char saltz_newsroomVersionString[] __attribute__ ((used)) = "@(#)PROGRAM:saltz-newsroom  PROJECT:saltz-newsroom-1" "\n";
+ const double saltz_newsroomVersionNumber __attribute__ ((used)) = (double)1.;

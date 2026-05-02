@@ -1,0 +1,55 @@
+require 'pathname'
+require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
+
+ws_dir = Pathname.new(__dir__)
+ws_dir = ws_dir.parent until
+  File.exist?("#{ws_dir}/node_modules/react-native-macos/scripts/react_native_pods.rb") ||
+  ws_dir.expand_path.to_s == '/'
+require "#{ws_dir}/node_modules/react-native-macos/scripts/react_native_pods.rb"
+
+prepare_react_native_project!
+
+target 'saltz-newsroom-macOS' do
+  platform :macos, '14.0'
+
+  use_expo_modules!
+
+  config_command = ['npx', 'expo-modules-autolinking', 'react-native-config', '--json', '--platform', 'ios']
+  config = use_native_modules!(config_command)
+
+  use_react_native!(
+    :path => "#{config[:reactNativePath]}-macos",
+    :fabric_enabled => ENV['RCT_NEW_ARCH_ENABLED'] == '1',
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  post_install do |installer|
+    react_native_post_install(installer)
+
+    excluded_targets = ['RNWorklets', 'RNReanimated', 'RNSVG', 'RNGestureHandler', 'RNScreens', 'RNDateTimePicker']
+
+    installer.pods_project.targets.each do |target|
+      if excluded_targets.include?(target.name)
+        target.build_configurations.each do |config|
+          config.build_settings['EXCLUDED_ARCHS[sdk=macosx*]'] = 'arm64 x86_64'
+          config.build_settings['SKIP_INSTALL'] = 'YES'
+        end
+        target.build_phases.each do |phase|
+          if phase.is_a?(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
+            phase.shell_script = 'echo "Skipped for macOS"'
+          end
+        end
+      end
+    end
+
+    # Edit xcconfig files directly to remove excluded libraries from linker flags
+    Dir.glob("#{installer.sandbox.root}/Target Support Files/**/*.xcconfig").each do |xcconfig_path|
+      content = File.read(xcconfig_path)
+      excluded_targets.each do |target|
+        content = content.gsub(/-l"#{target}"/, '')
+        content = content.gsub(/"-F\$\{PODS_CONFIGURATION_BUILD_DIR\}\/#{target}"/, '')
+      end
+      File.write(xcconfig_path, content)
+    end
+  end
+end
