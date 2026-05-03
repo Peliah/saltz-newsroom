@@ -1,18 +1,34 @@
-import { onlineManager } from '@tanstack/react-query';
+import NetInfo from '@react-native-community/netinfo';
 import { WifiOff } from 'lucide-react-native';
-import { useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { df } from '@/constants/typography';
 
 export function OfflineBanner() {
-  const online = useSyncExternalStore(
-    onlineManager.subscribe,
-    () => onlineManager.isOnline(),
-    () => true
-  );
+  const [isOnline, setIsOnline] = useState(true);
+  const closedRef = useRef(false);
 
-  if (online) return null;
+  useEffect(() => {
+    closedRef.current = false;
+
+    void NetInfo.fetch().then((state) => {
+      if (closedRef.current) return;
+      setIsOnline(state.isConnected ?? true);
+    });
+
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (closedRef.current) return;
+      setIsOnline(state.isConnected ?? true);
+    });
+
+    return () => {
+      closedRef.current = true;
+      unsubscribe();
+    };
+  }, []);
+
+  if (isOnline) return null;
 
   return (
     <View style={styles.wrap} accessibilityRole="alert">
