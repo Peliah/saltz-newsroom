@@ -7,6 +7,8 @@
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "macos:xcode": "open macos/saltz-newsroom.xcodeproj",
+    "macos:release": "cd macos && xcodebuild -project saltz-newsroom.xcodeproj -scheme saltz-newsroom-macOS -configuration Release -derivedDataPath ./build-release -destination 'generic/platform=macOS' CODE_SIGN_IDENTITY=\"-\"",
     "web": "expo start --web",
     "lint": "expo lint"
   },

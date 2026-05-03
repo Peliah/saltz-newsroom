@@ -1,13 +1,14 @@
 import { MapPin, Sparkles, Tag } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    Pressable,
-    ScrollView,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  View,
+  useWindowDimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -35,6 +36,7 @@ type PersonalizeSheetProps = {
 
 export function PersonalizeSheet({ visible, preferences, onClose, onSave }: PersonalizeSheetProps) {
   const insets = useSafeAreaInsets();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const [draftCats, setDraftCats] = useState<Set<string>>(() => new Set(feedCategories));
   const [draftTopics, setDraftTopics] = useState<Set<string>>(new Set());
   const [draftCountry, setDraftCountry] = useState('');
@@ -107,66 +109,85 @@ export function PersonalizeSheet({ visible, preferences, onClose, onSave }: Pers
     });
   };
 
+  const sheetBody = (
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={styles.overlay}>
+        <Pressable style={styles.backdrop} onPress={onClose} accessibilityLabel="Dismiss" />
+        <View style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, 12) }]}>
+          <PersonalizeHeader onClose={onClose} />
+
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}>
+            <View style={styles.section}>
+              <SectionHeading icon={<Tag size={12} color="#9498A2" strokeWidth={1.5} />} title="Categories" />
+              <CategoryChipGrid categories={feedCategories} selected={draftCats} onToggle={toggleCat} />
+            </View>
+
+            <View style={styles.section}>
+              <SectionHeading
+                icon={<Sparkles size={12} color="#9498A2" strokeWidth={1.5} />}
+                title="Hobbies, work & topics"
+              />
+              <TopicChipGrid topics={PERSONALIZE_TOPIC_TAGS} selected={draftTopics} onToggle={toggleTopic} />
+              <CustomTopicRow value={customInput} onChangeText={setCustomInput} onAdd={addCustomTopic} />
+            </View>
+
+            <View style={styles.section}>
+              <SectionHeading icon={<MapPin size={12} color="#9498A2" strokeWidth={1.5} />} title="Geography" />
+              <GeographyFields
+                countries={PERSONALIZE_COUNTRIES}
+                countryLabel={countryLabel}
+                countryMenuOpen={countryMenuOpen}
+                onToggleCountryMenu={() => setCountryMenuOpen((o) => !o)}
+                onSelectCountry={(value) => {
+                  setDraftCountry(value);
+                  setCountryMenuOpen(false);
+                }}
+                cityHint={cityHint}
+                onCityHintChange={setCityHint}
+              />
+            </View>
+
+            <FeedPreviewPanel
+              visible={visible}
+              previewCategory={previewCategory}
+              countryCode={draftCountry}
+            />
+          </ScrollView>
+
+          <PersonalizeFooter onSkip={onClose} onSave={handleSave} />
+        </View>
+      </View>
+    </KeyboardAvoidingView>
+  );
+
+  // react-native-macos: native Modal often throws in HostFunction — use a window-sized overlay instead.
+  if (Platform.OS === 'macos') {
+    if (!visible) return null;
+    return (
+      <View
+        pointerEvents="box-none"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: windowWidth,
+          height: windowHeight,
+          zIndex: 100000,
+        }}>
+        {sheetBody}
+      </View>
+    );
+  }
+
   return (
     <Modal animationType="slide" transparent visible={visible} onRequestClose={onClose}>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <View style={styles.overlay}>
-          <Pressable style={styles.backdrop} onPress={onClose} accessibilityLabel="Dismiss" />
-          <View style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, 12) }]}>
-            <PersonalizeHeader onClose={onClose} />
-
-            <ScrollView
-              style={styles.scroll}
-              contentContainerStyle={styles.scrollContent}
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}>
-              <View style={styles.section}>
-                <SectionHeading icon={<Tag size={12} color="#9498A2" strokeWidth={1.5} />} title="Categories" />
-                <CategoryChipGrid categories={feedCategories} selected={draftCats} onToggle={toggleCat} />
-              </View>
-
-              <View style={styles.section}>
-                <SectionHeading
-                  icon={<Sparkles size={12} color="#9498A2" strokeWidth={1.5} />}
-                  title="Hobbies, work & topics"
-                />
-                <TopicChipGrid topics={PERSONALIZE_TOPIC_TAGS} selected={draftTopics} onToggle={toggleTopic} />
-                <CustomTopicRow
-                  value={customInput}
-                  onChangeText={setCustomInput}
-                  onAdd={addCustomTopic}
-                />
-              </View>
-
-              <View style={styles.section}>
-                <SectionHeading icon={<MapPin size={12} color="#9498A2" strokeWidth={1.5} />} title="Geography" />
-                <GeographyFields
-                  countries={PERSONALIZE_COUNTRIES}
-                  countryLabel={countryLabel}
-                  countryMenuOpen={countryMenuOpen}
-                  onToggleCountryMenu={() => setCountryMenuOpen((o) => !o)}
-                  onSelectCountry={(value) => {
-                    setDraftCountry(value);
-                    setCountryMenuOpen(false);
-                  }}
-                  cityHint={cityHint}
-                  onCityHintChange={setCityHint}
-                />
-              </View>
-
-              <FeedPreviewPanel
-                visible={visible}
-                previewCategory={previewCategory}
-                countryCode={draftCountry}
-              />
-            </ScrollView>
-
-            <PersonalizeFooter onSkip={onClose} onSave={handleSave} />
-          </View>
-        </View>
-      </KeyboardAvoidingView>
+      {sheetBody}
     </Modal>
   );
 }
