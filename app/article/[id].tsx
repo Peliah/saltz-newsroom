@@ -9,10 +9,12 @@ import { AskAiArticleCard } from '@/components/article/ask-ai-article-card';
 import { CommunityCheckCard } from '@/components/article/community-check-card';
 import { SupportingEvidenceCard } from '@/components/article/supporting-evidence-card';
 import { ArticleNavHeader } from '@/components/ui/article-nav-header';
+import { PageMaxWidth } from '@/components/ui/page-max-width';
 import { useSavedArticles } from '@/context/saved-articles-context';
 import { parseArticlePayload } from '@/libs/article-route';
 import { formatPublishedLine, formatRelativeAboutLine } from '@/libs/format-article-meta';
 import { articleStyles as styles } from '@/stylesheet/article.styles';
+import { pageWidthStyles } from '@/stylesheet/page.styles';
 
 export default function ArticleDetailsScreen() {
   const params = useLocalSearchParams<{ id: string; payload?: string }>();
@@ -70,7 +72,10 @@ export default function ArticleDetailsScreen() {
           <Text style={styles.backText}>Back</Text>
         </Pressable>
       </View>
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.content}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={[styles.content, pageWidthStyles.scrollContentCentered]}>
+        <PageMaxWidth>
         <View style={styles.heroTextBlock}>
           <View style={styles.metaTop}>
             <View style={styles.sourceBadge}>
@@ -136,6 +141,7 @@ export default function ArticleDetailsScreen() {
 
           <CommunityCheckCard />
         </View>
+        </PageMaxWidth>
       </ScrollView>
     </View>
   );

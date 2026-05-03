@@ -9,6 +9,7 @@ import { EventsEmptyState } from '@/components/events/events-empty-state';
 import { FilterChip } from '@/components/events/filter-chip';
 import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
+import { PageMaxWidth } from '@/components/ui/page-max-width';
 import {
     eventCities,
     eventFilterOptions,
@@ -17,6 +18,7 @@ import {
 } from '@/data/events';
 import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
 import { eventsStyles as styles } from '@/stylesheet/events.styles';
+import { pageWidthStyles } from '@/stylesheet/page.styles';
 
 export default function EventsScreen() {
   const headerOffset = useAuthHeaderOffset();
@@ -84,8 +86,9 @@ export default function EventsScreen() {
       <AuthHeader />
       <ScrollView
         style={[styles.scroll, { paddingTop: headerOffset }]}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, pageWidthStyles.scrollContentCentered]}
         showsVerticalScrollIndicator={false}>
+        <PageMaxWidth>
         <View style={styles.content}>
           <View style={styles.introRow}>
             <CalendarClock size={14} color="#EE343B" strokeWidth={1.75} />
@@ -245,6 +248,7 @@ export default function EventsScreen() {
         </View>
 
         <AuthFooter />
+        </PageMaxWidth>
       </ScrollView>
     </View>
   );

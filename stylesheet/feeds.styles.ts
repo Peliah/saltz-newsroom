@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { FEED_GRID_GAP } from '@/constants/layout';
+import { df } from '@/constants/typography';
+import { Platform, StyleSheet } from 'react-native';
 
 export const feedsStyles = StyleSheet.create({
   screen: {
@@ -27,8 +29,8 @@ export const feedsStyles = StyleSheet.create({
     marginRight: 2,
   },
   categoryLabel: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(18),
     letterSpacing: 0.5,
     textTransform: 'uppercase',
     fontFamily: 'InterRegular',
@@ -55,8 +57,8 @@ export const feedsStyles = StyleSheet.create({
     borderBottomColor: '#27292D',
   },
   sectionText: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(18),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
@@ -64,8 +66,8 @@ export const feedsStyles = StyleSheet.create({
   },
   headingText: {
     marginTop: 4,
-    fontSize: 24,
-    lineHeight: 26,
+    fontSize: df(28),
+    lineHeight: df(34),
     letterSpacing: -0.36,
     fontFamily: 'GeorgiaBold',
     color: '#F0F2F5',
@@ -77,9 +79,27 @@ export const feedsStyles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 12,
   },
-  featuredImage: {
-    height: 232,
+  featuredCardHover: {
+    borderColor: '#EE343B',
+  },
+  featuredImageClip: {
     width: '100%',
+    overflow: 'hidden',
+    ...(Platform.OS === 'web' || Platform.OS === 'macos'
+      ? { aspectRatio: 16 / 10 }
+      : { height: 232 }),
+  },
+  featuredImageZoomHost: {
+    width: '100%',
+    height: '100%',
+  },
+  featuredImageFill: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#1E1F23',
+  },
+  featuredTitleHover: {
+    color: '#EE343B',
   },
   imageOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -103,15 +123,15 @@ export const feedsStyles = StyleSheet.create({
     paddingVertical: 2,
   },
   badgeTextPrimary: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(18),
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
     color: '#FCFCFC',
   },
   badgeTextSecondary: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(18),
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
     color: '#F0F2F5',
@@ -130,15 +150,15 @@ export const feedsStyles = StyleSheet.create({
     gap: 6,
   },
   featuredTitle: {
-    fontSize: 24,
-    lineHeight: 26,
+    fontSize: df(28),
+    lineHeight: df(34),
     letterSpacing: -0.24,
     fontFamily: 'GeorgiaBold',
     color: '#F0F2F5',
   },
   featuredDescription: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(14),
+    lineHeight: df(20),
     fontFamily: 'InterRegular',
     color: '#9498A2',
   },
@@ -150,8 +170,8 @@ export const feedsStyles = StyleSheet.create({
     minWidth: 0,
   },
   metaText: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(12),
+    lineHeight: df(18),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
@@ -161,28 +181,41 @@ export const feedsStyles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    gap: 14,
+    justifyContent: 'flex-start',
+    alignContent: 'flex-start',
+    gap: FEED_GRID_GAP,
   },
   gridCard: {
-    width: '48%',
     borderWidth: 1,
     borderColor: '#27292D',
     backgroundColor: '#131417',
+    overflow: 'hidden',
+  },
+  gridCardHover: {
+    borderColor: '#EE343B',
   },
   fullWidthCard: {
     width: '100%',
   },
   gridImageWrap: {
     position: 'relative',
+    overflow: 'hidden',
+    height: 100,
+  },
+  gridImageWrapFull: {
+    height: 160,
+  },
+  gridImageZoomHost: {
+    width: '100%',
+    height: '100%',
   },
   gridImage: {
     width: '100%',
-    height: 100,
+    height: '100%',
     backgroundColor: '#1E1F23',
   },
-  fullWidthImage: {
-    height: 160,
+  gridTitleHover: {
+    color: '#EE343B',
   },
   gridSaveButton: {
     position: 'absolute',
@@ -205,8 +238,8 @@ export const feedsStyles = StyleSheet.create({
     minWidth: 0,
   },
   sourceText: {
-    fontSize: 9,
-    lineHeight: 14,
+    fontSize: df(11),
+    lineHeight: df(17),
     letterSpacing: 0.18,
     textTransform: 'uppercase',
     fontFamily: 'JetBrainsMono',
@@ -215,8 +248,8 @@ export const feedsStyles = StyleSheet.create({
     flexGrow: 1,
   },
   dotText: {
-    fontSize: 9,
-    lineHeight: 14,
+    fontSize: df(11),
+    lineHeight: df(17),
     color: '#9498A2',
     fontFamily: 'JetBrainsMono',
     flexShrink: 0,
@@ -228,15 +261,15 @@ export const feedsStyles = StyleSheet.create({
     gap: 4,
   },
   gridTitle: {
-    fontSize: 16,
-    lineHeight: 18,
+    fontSize: df(18),
+    lineHeight: df(22),
     letterSpacing: -0.24,
     color: '#F0F2F5',
     fontFamily: 'GeorgiaBold',
   },
   gridDescription: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(14),
+    lineHeight: df(20),
     color: '#9498A2',
     fontFamily: 'InterRegular',
   },
@@ -257,14 +290,14 @@ export const feedsStyles = StyleSheet.create({
     backgroundColor: '#1E1F23',
   },
   emptyStateTitle: {
-    fontSize: 16,
-    lineHeight: 20,
+    fontSize: df(18),
+    lineHeight: df(24),
     color: '#F0F2F5',
     fontFamily: 'GeorgiaBold',
   },
   emptyStateDescription: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(14),
+    lineHeight: df(20),
     color: '#9498A2',
     fontFamily: 'InterRegular',
     textAlign: 'center',

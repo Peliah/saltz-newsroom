@@ -1,16 +1,34 @@
-import { onlineManager } from '@tanstack/react-query';
+import NetInfo from '@react-native-community/netinfo';
 import { WifiOff } from 'lucide-react-native';
-import { useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export function OfflineBanner() {
-  const online = useSyncExternalStore(
-    onlineManager.subscribe,
-    () => onlineManager.isOnline(),
-    () => true
-  );
+import { df } from '@/constants/typography';
 
-  if (online) return null;
+export function OfflineBanner() {
+  const [isOnline, setIsOnline] = useState(true);
+  const closedRef = useRef(false);
+
+  useEffect(() => {
+    closedRef.current = false;
+
+    void NetInfo.fetch().then((state) => {
+      if (closedRef.current) return;
+      setIsOnline(state.isConnected ?? true);
+    });
+
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (closedRef.current) return;
+      setIsOnline(state.isConnected ?? true);
+    });
+
+    return () => {
+      closedRef.current = true;
+      unsubscribe();
+    };
+  }, []);
+
+  if (isOnline) return null;
 
   return (
     <View style={styles.wrap} accessibilityRole="alert">
@@ -39,8 +57,8 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    fontSize: 12,
-    lineHeight: 17,
+    fontSize: df(12),
+    lineHeight: df(17),
     fontFamily: 'InterRegular',
     color: '#C5C8CE',
   },

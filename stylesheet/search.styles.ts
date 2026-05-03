@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { df } from '@/constants/typography';
 
 export const searchStyles = StyleSheet.create({
   body: {
@@ -18,16 +19,16 @@ export const searchStyles = StyleSheet.create({
     gap: 8,
   },
   kicker: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(10),
+    lineHeight: df(15),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     color: '#EE343B',
     fontFamily: 'JetBrainsMono',
   },
   title: {
-    fontSize: 24,
-    lineHeight: 26,
+    fontSize: df(24),
+    lineHeight: df(26),
     letterSpacing: -0.36,
     color: '#F0F2F5',
     fontFamily: 'GeorgiaBold',
@@ -41,19 +42,16 @@ export const searchStyles = StyleSheet.create({
   },
   searchInput: {
     color: '#F0F2F5',
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: df(12),
+    lineHeight: df(16),
     fontFamily: 'InterRegular',
   },
   resultsCount: {
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: df(10),
+    lineHeight: df(15),
     letterSpacing: 0.2,
     textTransform: 'uppercase',
     color: '#9498A2',
     fontFamily: 'JetBrainsMono',
-  },
-  listStack: {
-    gap: 12,
   },
 });

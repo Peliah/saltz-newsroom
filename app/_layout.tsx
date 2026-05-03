@@ -9,6 +9,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { QueryProvider } from '@/components/providers/query-provider';
 import { PreferencesProvider } from '@/context/preferences-context';
+import { ResponsiveLayoutProvider } from '@/context/responsive-layout-context';
 import { SavedArticlesProvider } from '@/context/saved-articles-context';
 import { migrateSavedArticlesSchema } from '@/libs/db/saved-articles-repo';
 
@@ -20,6 +21,8 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
+    // Icon font for Android / web `IconSymbol` (Material). macOS uses Lucide shim via Metro instead.
+    material: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialIcons.ttf'),
     InterRegular: require('@/assets/fonts/inter/InterRegular.ttf'),
     InterBold: require('@/assets/fonts/inter/InterBold.ttf'),
     GeorgiaRegular: require('@/assets/fonts/georgia/georgiaRegular.ttf'),
@@ -38,31 +41,33 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <QueryProvider>
-        <PreferencesProvider>
-          <SQLiteProvider databaseName="saltz-newsroom.db" onInit={migrateSavedArticlesSchema}>
-            <SavedArticlesProvider>
-              <Stack>
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen
-                  name="article"
-                  options={{
-                    headerShown: false,
-                    presentation: 'modal',
-                    animation: 'slide_from_bottom',
-                    gestureDirection: 'vertical',
-                    animationMatchesGesture: true,
-                  }}
-                />
-                <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-              </Stack>
-              <StatusBar style="auto" />
-            </SavedArticlesProvider>
-          </SQLiteProvider>
-        </PreferencesProvider>
-      </QueryProvider>
+    <SafeAreaProvider style={{ flex: 1 }}>
+      <ResponsiveLayoutProvider>
+        <QueryProvider>
+          <PreferencesProvider>
+            <SQLiteProvider databaseName="saltz-newsroom.db" onInit={migrateSavedArticlesSchema}>
+              <SavedArticlesProvider>
+                <Stack>
+                  <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="article"
+                    options={{
+                      headerShown: false,
+                      presentation: 'modal',
+                      animation: 'slide_from_bottom',
+                      gestureDirection: 'vertical',
+                      animationMatchesGesture: true,
+                    }}
+                  />
+                  <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+                </Stack>
+                <StatusBar style="auto" />
+              </SavedArticlesProvider>
+            </SQLiteProvider>
+          </PreferencesProvider>
+        </QueryProvider>
+      </ResponsiveLayoutProvider>
     </SafeAreaProvider>
   );
 }

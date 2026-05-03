@@ -13,7 +13,7 @@ export default function SignUpScreen() {
 
   return (
     <View style={styles.screen}>
-      <AuthHeader />
+      <AuthHeader variant="auth" />
 
       <View style={[styles.content, { paddingTop: contentPaddingTop }]}>
         <View style={styles.card}>

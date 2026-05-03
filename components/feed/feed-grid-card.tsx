@@ -1,9 +1,11 @@
 import { Image } from 'expo-image';
-import { Bookmark, Clock3 } from 'lucide-react-native';
 import { router } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { Bookmark, Clock3 } from 'lucide-react-native';
+import { Platform, Pressable, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
 
+import { FeedCardImageZoom } from '@/components/feed/feed-card-image-zoom';
+import { useFeedCardHover } from '@/hooks/use-feed-card-hover';
 import { useSubtlePressScale } from '@/hooks/use-subtle-press';
 import { toArticleRouteParams } from '@/libs/article-route';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
@@ -15,6 +17,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 type FeedGridCardProps = {
   item: FeedItem;
   fullWidth?: boolean;
+  style?: StyleProp<ViewStyle>;
   saved?: boolean;
   onSavePress?: () => void;
   onPress?: () => void;
@@ -46,10 +49,13 @@ function SaveButton({
 export function FeedGridCard({
   item,
   fullWidth = false,
+  style,
   saved = false,
   onSavePress,
   onPress,
 }: FeedGridCardProps) {
+  const { hovered, onHoverIn, onHoverOut } = useFeedCardHover();
+
   const openDetails = () => {
     if (onPress) {
       onPress();
@@ -63,15 +69,21 @@ export function FeedGridCard({
 
   return (
     <Pressable
-      style={[styles.gridCard, fullWidth && styles.fullWidthCard]}
+      style={[
+        styles.gridCard,
+        style,
+        fullWidth && styles.fullWidthCard,
+        hovered && styles.gridCardHover,
+        (Platform.OS === 'web' || Platform.OS === 'macos') && { cursor: 'pointer' },
+      ]}
+      onHoverIn={onHoverIn}
+      onHoverOut={onHoverOut}
       onPress={openDetails}
       accessibilityLabel={`Open article: ${item.title}`}>
-      <View style={styles.gridImageWrap}>
-        <Image
-          source={{ uri: item.imageUrl }}
-          style={[styles.gridImage, fullWidth && styles.fullWidthImage]}
-          contentFit="cover"
-        />
+      <View style={[styles.gridImageWrap, fullWidth && styles.gridImageWrapFull]}>
+        <FeedCardImageZoom hovered={hovered} hostStyle={styles.gridImageZoomHost}>
+          <Image source={{ uri: item.imageUrl }} style={styles.gridImage} contentFit="cover" />
+        </FeedCardImageZoom>
         {onSavePress ? <SaveButton saved={saved} onPress={onSavePress} /> : null}
       </View>
 
@@ -90,7 +102,7 @@ export function FeedGridCard({
           </Text>
         </View>
 
-        <Text style={styles.gridTitle} numberOfLines={3}>
+        <Text style={[styles.gridTitle, hovered && styles.gridTitleHover]} numberOfLines={3}>
           {item.title}
         </Text>
         <Text style={styles.gridDescription} numberOfLines={3}>

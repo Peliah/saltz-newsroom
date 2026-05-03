@@ -1,6 +1,8 @@
 import { Link } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { df } from '@/constants/typography';
+
 export default function ModalScreen() {
   return (
     <View style={styles.container}>
@@ -24,13 +26,13 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   title: {
-    fontSize: 32,
+    fontSize: df(32),
     fontWeight: '700',
     color: '#111827',
     fontFamily: 'GeorgiaBold',
   },
   linkText: {
-    fontSize: 16,
+    fontSize: df(16),
     color: '#2563eb',
     fontFamily: 'InterRegular',
   },

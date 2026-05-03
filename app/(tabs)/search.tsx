@@ -5,21 +5,25 @@ import { Platform, RefreshControl, ScrollView, Text, TextInput, View } from 'rea
 import { FeedGridCard } from '@/components/feed/feed-grid-card';
 import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
+import { PageMaxWidth } from '@/components/ui/page-max-width';
 import { LoadingBlock } from '@/components/ui/loading-block';
 import { OfflineBanner } from '@/components/ui/offline-banner';
 import { StateMessage } from '@/components/ui/state-message';
 import { useSavedArticles } from '@/context/saved-articles-context';
 import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
+import { useFeedGridCardWidth } from '@/hooks/use-feed-grid-layout';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { fetchSearch } from '@/libs/news/client';
 import { normalizeQuery, searchKey } from '@/libs/news/query-keys';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
+import { pageWidthStyles } from '@/stylesheet/page.styles';
 import { searchStyles } from '@/stylesheet/search.styles';
 
 const MIN_QUERY_LEN = 2;
 
 export default function SearchScreen() {
   const headerOffset = useAuthHeaderOffset();
+  const { cardWidth } = useFeedGridCardWidth();
   const { isSaved, toggleSaved } = useSavedArticles();
   const [query, setQuery] = useState('');
   const debounced = useDebouncedValue(query, 400);
@@ -42,7 +46,7 @@ export default function SearchScreen() {
       <AuthHeader />
       <ScrollView
         style={[searchStyles.body, { paddingTop: headerOffset }]}
-        contentContainerStyle={searchStyles.content}
+        contentContainerStyle={[searchStyles.content, pageWidthStyles.scrollContentCentered]}
         refreshControl={
           <RefreshControl
             refreshing={isRefetching}
@@ -52,6 +56,7 @@ export default function SearchScreen() {
             colors={Platform.OS === 'android' ? ['#EE343B'] : undefined}
           />
         }>
+        <PageMaxWidth>
         <OfflineBanner />
         <View style={searchStyles.headerCard}>
           <Text style={searchStyles.kicker}>Search</Text>
@@ -82,12 +87,12 @@ export default function SearchScreen() {
             </View>
           </View>
         ) : (
-          <View style={searchStyles.listStack}>
+          <View style={styles.grid}>
             {results.map((item) => (
               <FeedGridCard
                 key={item.id}
                 item={item}
-                fullWidth
+                style={{ width: cardWidth }}
                 saved={isSaved(item.id)}
                 onSavePress={() => void toggleSaved(item)}
               />
@@ -96,6 +101,7 @@ export default function SearchScreen() {
         )}
 
         <AuthFooter />
+        </PageMaxWidth>
       </ScrollView>
     </View>
   );

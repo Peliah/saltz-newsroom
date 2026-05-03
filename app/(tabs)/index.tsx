@@ -17,18 +17,22 @@ import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
 import { LoadingBlock } from '@/components/ui/loading-block';
 import { OfflineBanner } from '@/components/ui/offline-banner';
+import { PageMaxWidth } from '@/components/ui/page-max-width';
 import { StateMessage } from '@/components/ui/state-message';
 import { usePreferences } from '@/context/preferences-context';
 import { useSavedArticles } from '@/context/saved-articles-context';
 import { feedCategories } from '@/data/feed';
 import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
+import { useFeedGridCardWidth } from '@/hooks/use-feed-grid-layout';
 import { fetchFeed } from '@/libs/news/client';
 import { feedKey } from '@/libs/news/query-keys';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
+import { pageWidthStyles } from '@/stylesheet/page.styles';
 import type { FeedNavDirection, FeedNavState } from '@/types/feed';
 
 export default function HomeScreen() {
   const headerOffset = useAuthHeaderOffset();
+  const { cardWidth } = useFeedGridCardWidth();
   const { preferences } = usePreferences();
   const { isSaved, toggleSaved } = useSavedArticles();
   const [feedNav, setFeedNav] = useState<FeedNavState>({
@@ -100,8 +104,8 @@ export default function HomeScreen() {
     <View style={styles.screen}>
       <AuthHeader />
       <ScrollView
-        style={[styles.content, { paddingTop: headerOffset }]}
-        contentContainerStyle={styles.scrollContent}
+        style={[styles.content, { paddingTop: Platform.OS === 'web' ? 20 : headerOffset }]}
+        contentContainerStyle={[styles.scrollContent, pageWidthStyles.scrollContentCentered]}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -112,6 +116,7 @@ export default function HomeScreen() {
           />
         }>
         <OfflineBanner />
+        <PageMaxWidth>
         <CategoryTabs
           categories={visibleCategories}
           activeCategory={activeCategory}
@@ -145,6 +150,7 @@ export default function HomeScreen() {
                       <FeedGridCard
                         key={item.id}
                         item={item}
+                        style={{ width: cardWidth }}
                         saved={isSaved(item.id)}
                         onSavePress={() => void toggleSaved(item)}
                       />
@@ -159,6 +165,7 @@ export default function HomeScreen() {
         </View>
 
         <AuthFooter />
+        </PageMaxWidth>
       </ScrollView>
     </View>
   );

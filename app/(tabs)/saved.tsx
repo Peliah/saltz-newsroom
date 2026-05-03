@@ -4,13 +4,17 @@ import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { FeedGridCard } from '@/components/feed/feed-grid-card';
 import { AuthFooter } from '@/components/ui/auth-footer';
 import { AuthHeader } from '@/components/ui/auth-header';
+import { PageMaxWidth } from '@/components/ui/page-max-width';
 import { useSavedArticles } from '@/context/saved-articles-context';
 import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
+import { useFeedGridCardWidth } from '@/hooks/use-feed-grid-layout';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
+import { pageWidthStyles } from '@/stylesheet/page.styles';
 import { savedStyles } from '@/stylesheet/saved.styles';
 
 export default function SavedScreen() {
   const headerOffset = useAuthHeaderOffset();
+  const { cardWidth } = useFeedGridCardWidth();
   const { items, ready, isSaved, toggleSaved, clearAll } = useSavedArticles();
 
   const onClearAll = useCallback(() => {
@@ -25,7 +29,8 @@ export default function SavedScreen() {
       <AuthHeader />
       <ScrollView
         style={[savedStyles.body, { paddingTop: headerOffset }]}
-        contentContainerStyle={savedStyles.content}>
+        contentContainerStyle={[savedStyles.content, pageWidthStyles.scrollContentCentered]}>
+        <PageMaxWidth>
         <View style={savedStyles.headerCard}>
           <Text style={savedStyles.kicker}>Library</Text>
           <Text style={savedStyles.title}>Saved Articles</Text>
@@ -39,12 +44,12 @@ export default function SavedScreen() {
           ) : null}
         </View>
 
-        <View style={savedStyles.listStack}>
+        <View style={styles.grid}>
           {items.map((item) => (
             <FeedGridCard
               key={item.id}
               item={item}
-              fullWidth
+              style={{ width: cardWidth }}
               saved={isSaved(item.id)}
               onSavePress={() => void toggleSaved(item)}
             />
@@ -52,6 +57,7 @@ export default function SavedScreen() {
         </View>
 
         <AuthFooter />
+        </PageMaxWidth>
       </ScrollView>
     </View>
   );
