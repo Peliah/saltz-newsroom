@@ -54,7 +54,4 @@ export const searchStyles = StyleSheet.create({
     color: '#9498A2',
     fontFamily: 'JetBrainsMono',
   },
-  listStack: {
-    gap: 12,
-  },
 });

@@ -15,6 +15,14 @@ export const APP_HEADER_BREAKPOINT = 900;
 /** Max width for main page content and chrome (`AppChromeHeader`) on large viewports. */
 export const PAGE_MAX_WIDTH = 1240;
 
+/** Gap between cards in feed grids (`feeds.styles` grid). */
+export const FEED_GRID_GAP = 12;
+
+/**
+ * Horizontal inset subtracted for column math (tab scroll / feed container padding 8+8).
+ */
+export const FEED_GRID_PAGE_INSET_X = 16;
+
 /** @deprecated Use APP_HEADER_INNER_HEIGHT */
 export const AUTH_HEADER_INNER_HEIGHT = APP_HEADER_INNER_HEIGHT;
 

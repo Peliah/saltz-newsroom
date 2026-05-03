@@ -23,6 +23,7 @@ import { usePreferences } from '@/context/preferences-context';
 import { useSavedArticles } from '@/context/saved-articles-context';
 import { feedCategories } from '@/data/feed';
 import { useAuthHeaderOffset } from '@/hooks/use-auth-header-offset';
+import { useFeedGridCardWidth } from '@/hooks/use-feed-grid-layout';
 import { fetchFeed } from '@/libs/news/client';
 import { feedKey } from '@/libs/news/query-keys';
 import { feedsStyles as styles } from '@/stylesheet/feeds.styles';
@@ -31,6 +32,7 @@ import type { FeedNavDirection, FeedNavState } from '@/types/feed';
 
 export default function HomeScreen() {
   const headerOffset = useAuthHeaderOffset();
+  const { cardWidth } = useFeedGridCardWidth();
   const { preferences } = usePreferences();
   const { isSaved, toggleSaved } = useSavedArticles();
   const [feedNav, setFeedNav] = useState<FeedNavState>({
@@ -148,6 +150,7 @@ export default function HomeScreen() {
                       <FeedGridCard
                         key={item.id}
                         item={item}
+                        style={{ width: cardWidth }}
                         saved={isSaved(item.id)}
                         onSavePress={() => void toggleSaved(item)}
                       />

@@ -1,3 +1,4 @@
+import { FEED_GRID_GAP } from '@/constants/layout';
 import { df } from '@/constants/typography';
 import { Platform, StyleSheet } from 'react-native';
 
@@ -78,10 +79,27 @@ export const feedsStyles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 12,
   },
-  featuredImage: {
-    height: Platform.OS === 'web' || Platform.OS === 'macos' ? 'auto' : 232,
+  featuredCardHover: {
+    borderColor: '#EE343B',
+  },
+  featuredImageClip: {
     width: '100%',
-    aspectRatio: 16 / 10,
+    overflow: 'hidden',
+    ...(Platform.OS === 'web' || Platform.OS === 'macos'
+      ? { aspectRatio: 16 / 10 }
+      : { height: 232 }),
+  },
+  featuredImageZoomHost: {
+    width: '100%',
+    height: '100%',
+  },
+  featuredImageFill: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#1E1F23',
+  },
+  featuredTitleHover: {
+    color: '#EE343B',
   },
   imageOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -163,28 +181,41 @@ export const feedsStyles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    gap: 14,
+    justifyContent: 'flex-start',
+    alignContent: 'flex-start',
+    gap: FEED_GRID_GAP,
   },
   gridCard: {
-    width: Platform.OS === 'web' || Platform.OS === 'macos' ? '32.5%' : '48%',
     borderWidth: 1,
     borderColor: '#27292D',
     backgroundColor: '#131417',
+    overflow: 'hidden',
+  },
+  gridCardHover: {
+    borderColor: '#EE343B',
   },
   fullWidthCard: {
     width: '100%',
   },
   gridImageWrap: {
     position: 'relative',
+    overflow: 'hidden',
+    height: 100,
+  },
+  gridImageWrapFull: {
+    height: 160,
+  },
+  gridImageZoomHost: {
+    width: '100%',
+    height: '100%',
   },
   gridImage: {
     width: '100%',
-    height: 100,
+    height: '100%',
     backgroundColor: '#1E1F23',
   },
-  fullWidthImage: {
-    height: 160,
+  gridTitleHover: {
+    color: '#EE343B',
   },
   gridSaveButton: {
     position: 'absolute',
